@@ -21,4 +21,7 @@ LEFT = 2
 RIGHT = -2
 PORTAL = 3
 
+# Game Objects
 PACMAN = 0
+PELLET = 1
+POWERPELLET = 2
