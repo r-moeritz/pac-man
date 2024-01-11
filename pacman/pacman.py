@@ -4,9 +4,8 @@ from vector import Vector2
 from constants import *
 
 class Pacman(object):
-    def __init__(self):
+    def __init__(self, node):
         self.name = PACMAN
-        self.position = Vector2(200, 400)
         self.directions = { STOP: Vector2(),
                             UP: Vector2(0,-1),
                             DOWN: Vector2(0,1),
@@ -16,10 +15,28 @@ class Pacman(object):
         self.speed = 100 * TILEWIDTH/16
         self.radius = 10
         self.color = YELLOW
+        self.node = node
+        self.setPosition()
+
+    def setPosition(self):
+        self.position = self.node.position.copy()
 
     def update(self, dt):
-        self.position += self.directions[self.direction] * self.speed * dt
-        self.direction = self.getValidKey()
+        #self.position += self.directions[self.direction] * self.speed * dt
+        dir = self.getValidKey()
+        self.direction = dir
+        self.node = self.getNewTarget(dir)
+        self.setPosition()
+
+    def validDirection(self, direction):
+        return True if direction is not STOP and \
+           self.node.neighbors[direction] is not None \
+           else False
+
+    def getNewTarget(self, direction):
+        return self.node.neighbors[direction] \
+            if self.validDirection(direction) \
+               else self.node
 
     def getValidKey(self):
         key_pressed = pygame.key.get_pressed()
