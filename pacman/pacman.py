@@ -4,6 +4,7 @@ from vector import Vector2
 from constants import *
 
 class Pacman(object):
+    
     def __init__(self, node):
         self.name = PACMAN
         self.directions = { STOP: Vector2(),
@@ -18,6 +19,7 @@ class Pacman(object):
         self.node = node
         self.setPosition()
         self.target = node
+        self.collideRadius = 5
 
     def setPosition(self):
         self.position = self.node.position.copy()
@@ -89,4 +91,12 @@ class Pacman(object):
             return False
         return True if direction == self.direction * -1 else False
 
-    
+    def eatPellets(self, pelletList):
+        for pellet in pelletList:
+            d = self.position - pellet.position
+            dSquared = d.magnitudeSquared()
+            rSquared = (pellet.radius + self.collideRadius)**2
+            if dSquared <= rSquared:
+                return pellet
+
+        return None

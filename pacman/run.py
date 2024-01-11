@@ -6,6 +6,7 @@ from nodes import NodeGroup
 from pellets import PelletGroup
 
 class GameController(object):
+    
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
@@ -27,6 +28,7 @@ class GameController(object):
         dt = self.clock.tick(30) / 1000.0
         self.pacman.update(dt)
         self.pellets.update(dt)
+        self.checkPelletEvents()
         self.checkEvents()
         self.render()
 
@@ -41,6 +43,13 @@ class GameController(object):
         self.pellets.render(self.screen)
         self.pacman.render(self.screen)
         pygame.display.update()
+
+    def checkPelletEvents(self):
+        pellet = self.pacman.eatPellets(self.pellets.pelletList)
+        if pellet:
+            self.pellets.numEaten += 1
+            self.pellets.pelletList.remove(pellet)
+
 
 if __name__ == '__main__':
     game = GameController()
