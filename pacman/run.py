@@ -18,6 +18,7 @@ class GameController(object):
     def startGame(self):
         self.setBackground()
         self.nodes = NodeGroup('maze.txt')
+        self.nodes.setPortalPair((0,17), (27,17))
         self.pacman = Pacman(self.nodes.getStartTempNode())
 
     def update(self):

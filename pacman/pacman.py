@@ -27,6 +27,9 @@ class Pacman(object):
         dir = self.getValidKey()
         if self.overshotTarget():
             self.node = self.target
+            if self.node.neighbors[PORTAL] is not None:
+                self.node = self.node.neighbors[PORTAL]
+                
             self.target = self.getNewTarget(dir)
             
             if self.target is not self.node:
