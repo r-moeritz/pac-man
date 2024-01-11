@@ -1,4 +1,4 @@
-.PHONY: venv install run
+.PHONY: install run
 
 install:
 	python -m venv .venv
