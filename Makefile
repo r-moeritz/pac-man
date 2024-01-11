@@ -1,10 +1,8 @@
 .PHONY: venv install run
 
-venv:
-	python -m venv .venv
-
 install:
-	pip install -r requirements.txt
+	python -m venv .venv
+	. .venv/bin/activate && pip install -r requirements.txt && deactivate
 
 run:
 	. .venv/bin/activate && python pacman/run.py && deactivate

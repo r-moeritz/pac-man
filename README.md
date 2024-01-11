@@ -8,7 +8,6 @@ Pac-Man game in Python.
 Setup
 ---
 
-	make venv
 	make install
 
 Run
