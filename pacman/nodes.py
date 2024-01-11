@@ -4,6 +4,7 @@ from constants import *
 import numpy as np
 
 class Node(object):
+    
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = { UP: None,
@@ -21,6 +22,7 @@ class Node(object):
                 pygame.draw.circle(screen, RED, self.position.asInt(), 12)
 
 class NodeGroup(object):
+    
     def __init__(self, level):
         self.level = level
         self.nodesLUT = {}
