@@ -10,4 +10,6 @@ class Ghost(Entity):
         Entity.__init__(self, node)
         self.name = GHOST
         self.points = 200
+        self.goal = Vector2()
+        self.directionMethod = self.goalDirection
         
