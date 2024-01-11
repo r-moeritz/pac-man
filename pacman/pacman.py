@@ -28,8 +28,18 @@ class Pacman(object):
         if self.overshotTarget():
             self.node = self.target
             self.target = self.getNewTarget(dir)
-            self.direction = STOP if self.target is self.node else dir
-            self.setPosition()                
+            
+            if self.target is not self.node:
+                self.direction = dir
+            else:
+                self.target = self.getNewTarget(self.direction)
+            
+            if self.target is self.node:
+                self.direction = STOP
+                
+            self.setPosition()
+        elif self.oppositeDirection(dir):
+            self.reverseDirection()
 
     def validDirection(self, direction):
         return True if direction is not STOP and \
@@ -66,3 +76,14 @@ class Pacman(object):
         node2Target = vec1.magnitudeSquared()
         node2Self = vec2.magnitudeSquared()
         return node2Self >= node2Target
+
+    def reverseDirection(self):
+        self.direction *= -1
+        self.node, self.target = self.target, self.node
+
+    def oppositeDirection(self, direction):
+        if direction is STOP:
+            return False
+        return True if direction == self.direction * -1 else False
+
+    
