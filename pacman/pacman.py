@@ -10,6 +10,7 @@ class Pacman(Entity):
         Entity.__init__(self, node)
         self.name = PACMAN
         self.color = YELLOW
+        self.direction = LEFT
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
