@@ -25,6 +25,7 @@ class MainMode(object):
         self.time = 20
         self.timer = 0
 
+        
 class ModeController(object):
 
     def __init__(self, entity):

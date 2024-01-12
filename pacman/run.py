@@ -7,6 +7,7 @@ from pellets import PelletGroup
 from ghosts import GhostGroup
 from fruit import Fruit
 from pause import Pause
+from text import TextGroup
 
 class GameController(object):
     
@@ -19,19 +20,26 @@ class GameController(object):
         self.pause = Pause(True)
         self.level = 0
         self.lives = 3
+        self.score = 0
+        self.textgroup = TextGroup()
 
     def restartGame(self):
         self.lives = 3
         self.level = 0
         self.pause.paused = True
         self.fruit = None
+        self.score = 0
         self.startGame()
+        self.textgroup.updateScore(self.score)
+        self.textgroup.updateLevel(self.level)
+        self.textgroup.showText(READYTXT)
 
     def resetLevel(self):
         self.pause.paused = True
         self.pacman.reset()
         self.ghosts.reset()
         self.fruit = None
+        self.textgroup.showText(READYTXT)
 
     def nextLevel(self):
         self.showEntities()
@@ -39,6 +47,7 @@ class GameController(object):
         self.pause.paused = True
         self.fruit = None
         self.startGame()
+        self.textgroup.updateLevel(self.level)
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -72,6 +81,7 @@ class GameController(object):
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
+        self.textgroup.update(dt)
         self.pellets.update(dt)
         if not self.pause.paused:
             self.pacman.update(dt)
@@ -87,6 +97,10 @@ class GameController(object):
         self.checkEvents()
         self.render()
 
+    def updateScore(self, points):
+        self.score += points
+        self.textgroup.updateScore(self.score)
+
     def checkFruitEvents(self):
         if (self.pellets.numEaten == 50 or self.pellets.numEaten == 140) \
            and self.fruit is None:
@@ -94,8 +108,14 @@ class GameController(object):
 
         if self.fruit is None:
             return
-        if self.pacman.collideCheck(self.fruit) \
-           or self.fruit.destroy:
+        if self.pacman.collideCheck(self.fruit):
+            self.updateScore(self.fruit.points)
+            self.textgroup.addText(str(self.fruit.points), WHITE,
+                                   self.fruit.position.x,
+                                   self.fruit.position.y,
+                                   8, time=1)
+            self.fruit = None
+        elif self.fruit.destroy:
             self.fruit = None
 
     def checkGhostEvents(self):
@@ -105,6 +125,11 @@ class GameController(object):
             if ghost.mode.current is FREIGHT:
                 self.pacman.visible = False
                 ghost.visible = False
+                self.updateScore(ghost.points)
+                self.textgroup.addText(str(ghost.points), WHITE,
+                                       ghost.position.x, ghost.position.y,
+                                       8, time=1)
+                self.ghosts.updatePoints()
                 self.pause.setPause(pauseTime=1, func=self.showEntities)
                 ghost.startSpawn()
                 self.nodes.allowHomeAccess(ghost)
@@ -113,6 +138,7 @@ class GameController(object):
                 self.pacman.die()
                 self.ghosts.hide()
                 if self.lives == 0:
+                    self.textgroup.showText(GAMEOVERTXT)
                     self.pause.setPause(pauseTime=3, func=self.restartGame)
                 else:
                     self.pause.setPause(pauseTime=3, func=self.resetLevel)
@@ -125,8 +151,10 @@ class GameController(object):
                  and self.pacman.alive:
                 self.pause.setPause(playerPaused=True)
                 if not self.pause.paused:
+                    self.textgroup.hideText()
                     self.showEntities()
                 else:
+                    self.textgroup.showText(PAUSETXT)
                     self.hideEntities()
 
     def render(self):
@@ -137,6 +165,7 @@ class GameController(object):
             self.fruit.render(self.screen)
         self.pacman.render(self.screen)
         self.ghosts.render(self.screen)
+        self.textgroup.render(self.screen)
         pygame.display.update()
 
     def checkPelletEvents(self):
@@ -144,6 +173,7 @@ class GameController(object):
         if not pellet:
             return
         self.pellets.numEaten += 1
+        self.updateScore(pellet.points)
         if self.pellets.numEaten == 30:
             self.ghosts.inky.startNode.allowAccess(RIGHT, self.ghosts.inky)
         elif self.pellets.numEaten == 70:

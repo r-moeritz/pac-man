@@ -61,6 +61,7 @@ class Ghost(Entity):
         self.points = 200
         self.directionmethod = self.goalDirection
 
+        
 class Blinky(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
@@ -68,6 +69,7 @@ class Blinky(Ghost):
         self.name = BLINKY
         self.color = RED
 
+        
 class Pinky(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
@@ -82,6 +84,7 @@ class Pinky(Ghost):
         self.goal = self.pacman.position + \
             self.pacman.directions[self.pacman.direction] * TILEWIDTH * 4
 
+        
 class Inky(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
@@ -97,6 +100,7 @@ class Inky(Ghost):
         vec2 = (vec1 - self.blinky.position) * 2
         self.goal = self.blinky.position + vec2
 
+        
 class Clyde(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
@@ -116,6 +120,7 @@ class Clyde(Ghost):
             self.goal = self.pacman.position \
                 + self.pacman.directions[self.pacman.direction] * TILEWIDTH * 4
 
+            
 class GhostGroup(object):
 
     def __init__(self, node, pacman):

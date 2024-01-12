@@ -33,6 +33,7 @@ class Node(object):
                 pygame.draw.line(screen, WHITE, line_start, line_end, 4)
                 pygame.draw.circle(screen, RED, self.position.asInt(), 12)
 
+
 class NodeGroup(object):
     
     def __init__(self, level):
