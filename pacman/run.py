@@ -8,6 +8,7 @@ from ghosts import GhostGroup
 from fruit import Fruit
 from pause import Pause
 from text import TextGroup
+from sprites import LifeSprites
 
 class GameController(object):
     
@@ -22,9 +23,11 @@ class GameController(object):
         self.lives = 3
         self.score = 0
         self.textgroup = TextGroup()
+        self.lifesprites = LifeSprites(self.lives)
 
     def restartGame(self):
         self.lives = 3
+        self.lifesprites.resetLives(self.lives)
         self.level = 0
         self.pause.paused = True
         self.fruit = None
@@ -135,6 +138,7 @@ class GameController(object):
                 self.nodes.allowHomeAccess(ghost)
             elif ghost.mode.current is not SPAWN and self.pacman.alive:
                 self.lives -= 1
+                self.lifesprites.removeImage()
                 self.pacman.die()
                 self.ghosts.hide()
                 if self.lives == 0:
@@ -166,6 +170,10 @@ class GameController(object):
         self.pacman.render(self.screen)
         self.ghosts.render(self.screen)
         self.textgroup.render(self.screen)
+        for i in range(len(self.lifesprites.images)):
+            x = self.lifesprites.images[i].get_width() * i
+            y = SCREENHEIGHT - self.lifesprites.images[i].get_height()
+            self.screen.blit(self.lifesprites.images[i], (x, y))
         pygame.display.update()
 
     def checkPelletEvents(self):
