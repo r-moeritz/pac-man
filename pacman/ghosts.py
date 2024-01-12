@@ -4,6 +4,7 @@ from vector import Vector2
 from constants import *
 from entity import Entity
 from modes import ModeController
+from sprites import GhostSprites
 
 class Ghost(Entity):
 
@@ -68,6 +69,7 @@ class Blinky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = BLINKY
         self.color = RED
+        self.sprites = GhostSprites(self)
 
         
 class Pinky(Ghost):
@@ -76,6 +78,7 @@ class Pinky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = PINKY
         self.color = PINK
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, 0)
@@ -91,6 +94,7 @@ class Inky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = INKY
         self.color = TEAL
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, TILEHEIGHT*NROWS)
@@ -107,6 +111,7 @@ class Clyde(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = CLYDE
         self.color = ORANGE
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(0, TILEHEIGHT*NROWS)

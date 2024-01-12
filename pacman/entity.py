@@ -23,6 +23,7 @@ class Entity(object):
         self.goal = None
         self.directionMethod = self.randomDirection
         self.setStartNode(node)
+        self.image = None
 
     def setStartNode(self, node):
         self.node = node
@@ -69,9 +70,11 @@ class Entity(object):
     def render(self, screen):
         if not self.visible:
             return
-
-        p = self.position.asInt()
-        pygame.draw.circle(screen, self.color, p, self.radius)
+        if self.image is None:
+            p = self.position.asInt()
+            pygame.draw.circle(screen, self.color, p, self.radius)
+        else:
+            screen.blit(self.image, self.position.asTuple())
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
