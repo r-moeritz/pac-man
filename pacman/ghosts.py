@@ -32,9 +32,9 @@ class Ghost(Entity):
     def chase(self):
         self.goal = self.pacman.position
 
-    def startFreight(self):
-        self.mode.setFreightMode()
-        if self.mode.current == FREIGHT:
+    def startFright(self):
+        self.mode.setFrightMode()
+        if self.mode.current is FRIGHT:
             self.setSpeed(50)
             self.directionMethod = self.randomDirection
 
@@ -137,9 +137,9 @@ class GhostGroup(object):
         for ghost in self:
             ghost.update(dt)
 
-    def startFreight(self):
+    def startFright(self):
         for ghost in self:
-            ghost.startFreight()
+            ghost.startFright()
         self.resetPoints()
 
     def setSpawnNode(self, node):

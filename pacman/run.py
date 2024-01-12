@@ -122,7 +122,7 @@ class GameController(object):
         for ghost in self.ghosts:
             if not self.pacman.collideGhost(ghost):
                 continue
-            if ghost.mode.current is FREIGHT:
+            if ghost.mode.current is FRIGHT:
                 self.pacman.visible = False
                 ghost.visible = False
                 self.updateScore(ghost.points)
@@ -180,7 +180,7 @@ class GameController(object):
             self.ghosts.clyde.startNode.allowAccess(LEFT, self.ghosts.clyde)
         self.pellets.pelletList.remove(pellet)
         if pellet.name is POWERPELLET:
-            self.ghosts.startFreight()
+            self.ghosts.startFright()
         if self.pellets.isEmpty():
             self.hideEntities()
             self.pause.setPause(pauseTime=3, func=self.nextLevel)
