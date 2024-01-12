@@ -115,3 +115,8 @@ class Entity(object):
         self.target = self.node.neighbors[direction]
         self.position = (self.node.position + self.target.position) / 2.0
         
+    def reset(self):
+        self.setStartNode(self.startNode)
+        self.direction = STOP
+        self.speed = 100
+        self.visible = True

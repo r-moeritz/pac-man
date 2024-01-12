@@ -18,11 +18,26 @@ class GameController(object):
         self.fruit = None
         self.pause = Pause(True)
         self.level = 0
+        self.lives = 3
+
+    def restartGame(self):
+        self.lives = 3
+        self.level = 0
+        self.pause.paused = True
+        self.fruit = None
+        self.startGame()
+
+    def resetLevel(self):
+        self.pause.paused = True
+        self.pacman.reset()
+        self.ghosts.reset()
+        self.fruit = None
 
     def nextLevel(self):
         self.showEntities()
         self.level += 1
         self.pause.paused = True
+        self.fruit = None
         self.startGame()
 
     def setBackground(self):
@@ -75,18 +90,28 @@ class GameController(object):
 
     def checkGhostEvents(self):
         for ghost in self.ghosts:
-            if self.pacman.collideGhost(ghost) \
-               and ghost.mode.current is FREIGHT:
+            if not self.pacman.collideGhost(ghost):
+                return
+            if ghost.mode.current is FREIGHT:
                 self.pacman.visible = False
                 ghost.visible = False
                 self.pause.setPause(pauseTime=1, func=self.showEntities)
                 ghost.startSpawn()
+            elif ghost.mode.current is not SPAWN and self.pacman.alive:
+                self.lives -= 1
+                self.pacman.die()
+                self.ghosts.hide()
+                if self.lives == 0:
+                    self.pause.setPause(pauseTime=3, func=self.restartGame)
+                else:
+                    self.pause.setPause(pauseTime=3, func=self.resetLevel)
 
     def checkEvents(self):
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
-            elif event.type == KEYDOWN and event.key == K_SPACE:
+            elif event.type == KEYDOWN and event.key == K_SPACE \
+                 and self.pacman.alive:
                 self.pause.setPause(playerPaused=True)
                 if not self.pause.paused:
                     self.showEntities()
