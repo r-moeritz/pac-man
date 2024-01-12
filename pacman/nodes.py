@@ -12,6 +12,18 @@ class Node(object):
                            LEFT: None,
                            RIGHT: None,
                            PORTAL: None }
+        self.access = { UP: [PACMAN, BLINKY, PINKY, INKY, CLYDE],
+                        DOWN: [PACMAN, BLINKY, PINKY, INKY, CLYDE],
+                        LEFT: [PACMAN, BLINKY, PINKY, INKY, CLYDE],
+                        RIGHT: [PACMAN, BLINKY, PINKY, INKY, CLYDE] }
+
+    def denyAccess(self, direction, entity):
+        if entity.name in self.access[direction]:
+            self.access[direction].remove(entity.name)
+
+    def allowAccess(self, direction, entity):
+        if entity.name not in self.access[direction]:
+            self.access[direction].append(entity.name)
 
     def render(self, screen):
         for n in self.neighbors.keys():
@@ -34,6 +46,42 @@ class NodeGroup(object):
         self.connectVertically(data)
         self.homekey = None
 
+    def getStartTempNode(self):
+        nodes = list(self.nodesLUT.values())
+        return nodes[0]
+
+    def denyAccess(self, col, row, direction, entity):
+        node = self.getNodeFromTiles(col, row)
+        if node is not None:
+            node.denyAccess(direction, entity)
+
+    def allowAccess(self, col, row, direction, entity):
+        node = self.getNodeFromTiles(col, row)
+        if node is not None:
+            node.allowAccess(direction, entity)
+
+    def denyAccessList(self, col, row, direction, entities):
+        for entity in entities:
+            self.denyAccess(col, row, direction, entity)
+
+    def allowAccessList(self, col, row, direction, entities):
+        for entity in entities:
+            self.allowAccess(col, row, direction, entity)
+
+    def denyHomeAccess(self, entity):
+        self.nodesLUT[self.homekey].denyAccess(DOWN, entity)
+
+    def allowHomeAccess(self, entity):
+        self.nodesLUT[self.homekey].allowAccess(DOWN, entity)
+
+    def denyHomeAccessList(self, entities):
+        for entity in entities:
+            self.denyHomeAccess(entity)
+
+    def allowHomeAccessList(self, entities):
+        for entity in entities:
+            self.allowHomeAccess(entity)
+            
     def render(self, screen):
         for node in self.nodesLUT.values():
             node.render(screen)
@@ -93,10 +141,6 @@ class NodeGroup(object):
             if (x, y) in self.nodesLUT.keys() \
                else None
 
-    def getStartTempNode(self):
-        nodes = list(self.nodesLUT.values())
-        return nodes[0]
-
     def setPortalPair(self, pair1, pair2):
         key1 = self.constructKey(*pair1)
         key2 = self.constructKey(*pair2)
@@ -105,11 +149,11 @@ class NodeGroup(object):
             self.nodesLUT[key2].neighbors[PORTAL] = self.nodesLUT[key1]
 
     def createHomeNodes(self, xoffset, yoffset):
-        homedata = np.array([['X', 'X', '+', 'X', 'X'],
-                             ['X', 'X', '.', 'X', 'X'],
-                             ['+', 'X', '.', 'X', '+'],
-                             ['+', 'X', '+', 'X', '+'],
-                             ['+', 'X', 'X', 'X', '+']])
+        homedata = np.array([['X','X','+','X','X'],
+                             ['X','X','.','X','X'],
+                             ['+','X','.','X','+'],
+                             ['+','.','+','.','+'],
+                             ['+','X','X','X','+']])
 
         self.createNodeTable(homedata, xoffset, yoffset)
         self.connectHorizontally(homedata, xoffset, yoffset)

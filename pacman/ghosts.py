@@ -41,6 +41,7 @@ class Ghost(Entity):
     def normalMode(self):
         self.setSpeed(100)
         self.directionMethod = self.goalDirection
+        self.homeNode.denyAccess(DOWN, self)
 
     def spawn(self):
         self.goal = self.spawnNode.position
