@@ -15,6 +15,7 @@ RED = (255, 0, 0)
 PINK = (255, 100, 150)
 TEAL = (100, 255, 255)
 ORANGE = (230, 190, 40)
+GREEN = (0, 255, 0)
 
 # Directions
 STOP = 0 # None
@@ -24,20 +25,19 @@ LEFT = 2
 RIGHT = -2
 PORTAL = 3
 
-# Game Objects
-PACMAN = 0
-PELLET = 1
-POWERPELLET = 2
-GHOST = 3
-
 # Ghost Modes
 SCATTER = 0
 CHASE = 1
 FREIGHT = 2
 SPAWN = 3
 
-# Ghosts
+# Game Objects
+PACMAN = 0
+PELLET = 1
+POWERPELLET = 2
+GHOST = 3
 BLINKY = 4
 PINKY = 5
 INKY = 6
 CLYDE = 7
+FRUIT = 8

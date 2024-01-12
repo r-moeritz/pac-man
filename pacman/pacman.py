@@ -11,6 +11,7 @@ class Pacman(Entity):
         self.name = PACMAN
         self.color = YELLOW
         self.direction = LEFT
+        self.setBetweenNodes(LEFT)
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt

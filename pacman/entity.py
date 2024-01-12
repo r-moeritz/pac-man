@@ -109,4 +109,9 @@ class Entity(object):
         index = distances.index(min(distances))
         return directions[index]
 
-    
+    def setBetweenNodes(self, direction):
+        if self.node.neighbors[direction] is None:
+            return
+        self.target = self.node.neighbors[direction]
+        self.position = (self.node.position + self.target.position) / 2.0
+        
