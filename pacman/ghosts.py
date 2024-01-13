@@ -8,7 +8,13 @@ from sprites import GhostSprites
 
 class Ghost(Entity):
 
-    def __init__(self, node, pacman=None, blinky=None):
+    speeds = { 0: (int(SPEED*.75), int(SPEED*.5)),
+               1: (int(SPEED*.85), int(SPEED*.55)),
+               2: (int(SPEED*.85), int(SPEED*.55)),
+               3: (int(SPEED*.85), int(SPEED*.55)),
+               4: (int(SPEED*.95), int(SPEED*.6)) }
+    
+    def __init__(self, node, pacman, blinky=None):
         Entity.__init__(self, node)
         self.name = GHOST
         self.points = 200
@@ -18,6 +24,7 @@ class Ghost(Entity):
         self.mode = ModeController(self)
         self.blinky = blinky
         self.homeNode = node
+        self.setSpeed(self.speeds[pacman.level if pacman.level < 4 else 4][0])
 
     def update(self, dt):
         self.sprites.update(dt)
@@ -37,11 +44,11 @@ class Ghost(Entity):
     def startFright(self):
         self.mode.setFrightMode()
         if self.mode.current is FRIGHT:
-            self.setSpeed(ENTITY_SPEED/2)
+            self.setSpeed(self.speeds[self.pacman.level if self.pacman.level < 4 else 4][1])
             self.directionMethod = self.randomDirection
 
     def normalMode(self):
-        self.setSpeed(ENTITY_SPEED)
+        self.setSpeed(self.speeds[self.pacman.level if self.pacman.level < 4 else 4][0])
         self.directionMethod = self.goalDirection
         self.homeNode.denyAccess(DOWN, self)
 
@@ -54,19 +61,20 @@ class Ghost(Entity):
     def startSpawn(self):
         self.mode.setSpawnMode()
         if self.mode.current == SPAWN:
-            self.setSpeed(2*ENTITY_SPEED)
+            self.setSpeed(2 * self.speeds[self.pacman.level if self.pacman.level < 4 else 4][0])
             self.directionMethod = self.goalDirection
             self.spawn()
 
     def reset(self):
         Entity.reset(self)
+        self.setSpeed(self.speeds[self.pacman.level if self.pacman.level < 4 else 4][0])
         self.points = 200
         self.directionmethod = self.goalDirection
 
         
 class Blinky(Ghost):
 
-    def __init__(self, node, pacman=None, blinky=None):
+    def __init__(self, node, pacman, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = BLINKY
         self.color = RED
@@ -77,7 +85,7 @@ class Blinky(Ghost):
         
 class Pinky(Ghost):
 
-    def __init__(self, node, pacman=None, blinky=None):
+    def __init__(self, node, pacman, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = PINKY
         self.color = PINK
@@ -90,7 +98,7 @@ class Pinky(Ghost):
         
 class Inky(Ghost):
 
-    def __init__(self, node, pacman=None, blinky=None):
+    def __init__(self, node, pacman, blinky):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = INKY
         self.color = TEAL
@@ -107,7 +115,7 @@ class Inky(Ghost):
         
 class Clyde(Ghost):
 
-    def __init__(self, node, pacman=None, blinky=None):
+    def __init__(self, node, pacman, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = CLYDE
         self.color = ORANGE

@@ -14,7 +14,6 @@ class Entity(object):
                             RIGHT: Vector2(1, 0),
                             STOP: Vector2() }
         self.direction = STOP
-        self.setSpeed(ENTITY_SPEED)
         self.radius =  10
         self.collideRadius = 5
         self.color = WHITE
@@ -23,6 +22,7 @@ class Entity(object):
         self.goal = None
         self.directionMethod = self.randomDirection
         self.setStartNode(node)
+        self.speed = 0
         self.image = None
 
     def setStartNode(self, node):
@@ -124,5 +124,4 @@ class Entity(object):
     def reset(self):
         self.setStartNode(self.startNode)
         self.direction = STOP
-        self.speed = ENTITY_SPEED
         self.visible = True

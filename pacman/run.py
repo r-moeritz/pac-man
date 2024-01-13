@@ -77,7 +77,7 @@ class GameController(object):
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)        
-        self.pacman = Pacman(self.nodes.getNodeFromTiles(15, 26))        
+        self.pacman = Pacman(self.nodes.getNodeFromTiles(15, 26), self.level)        
         self.pellets = PelletGroup('maze.txt')
         self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
         self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
