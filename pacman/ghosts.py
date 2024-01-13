@@ -20,6 +20,7 @@ class Ghost(Entity):
         self.homeNode = node
 
     def update(self, dt):
+        self.sprites.update(dt)
         self.mode.update(dt)
         if self.mode.current is SCATTER:
             self.scatter()
