@@ -29,6 +29,7 @@ class GameController(object):
         self.flashBG = False
         self.flashTime = 0.2
         self.flashTimer = 0
+        self.fruitCaptured = []
 
     def restartGame(self):
         self.lives = 3
@@ -41,6 +42,7 @@ class GameController(object):
         self.textgroup.updateScore(self.score)
         self.textgroup.updateLevel(self.level)
         self.textgroup.showText(READYTXT)
+        self.fruitCaptured = []
 
     def resetLevel(self):
         self.pause.paused = True
@@ -135,7 +137,7 @@ class GameController(object):
     def checkFruitEvents(self):
         if (self.pellets.numEaten == 50 or self.pellets.numEaten == 140) \
            and self.fruit is None:
-            self.fruit = Fruit(self.nodes.getNodeFromTiles(9, 20))
+            self.fruit = Fruit(self.nodes.getNodeFromTiles(9, 20), self.level)
 
         if self.fruit is None:
             return
@@ -145,6 +147,13 @@ class GameController(object):
                                    self.fruit.position.x,
                                    self.fruit.position.y,
                                    8, time=1)
+            fruitCaptured = False
+            for fruit in self.fruitCaptured:
+                if fruit.get_offset() == self.fruit.image.get_offset():
+                    fruitCaptured = True
+                    break
+            if not fruitCaptured:
+                self.fruitCaptured.append(self.fruit.image)
             self.fruit = None
         elif self.fruit.destroy:
             self.fruit = None
@@ -201,6 +210,10 @@ class GameController(object):
             x = self.lifesprites.images[i].get_width() * i
             y = SCREENHEIGHT - self.lifesprites.images[i].get_height()
             self.screen.blit(self.lifesprites.images[i], (x, y))
+        for i in range(len(self.fruitCaptured)):
+            x = SCREENWIDTH - self.fruitCaptured[i].get_width() * (i+1)
+            y = SCREENHEIGHT - self.fruitCaptured[i].get_height()
+            self.screen.blit(self.fruitCaptured[i], (x, y))
         pygame.display.update()
 
     def checkPelletEvents(self):
