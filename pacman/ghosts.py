@@ -37,11 +37,11 @@ class Ghost(Entity):
     def startFright(self):
         self.mode.setFrightMode()
         if self.mode.current is FRIGHT:
-            self.setSpeed(50)
+            self.setSpeed(ENTITY_SPEED/2)
             self.directionMethod = self.randomDirection
 
     def normalMode(self):
-        self.setSpeed(100)
+        self.setSpeed(ENTITY_SPEED)
         self.directionMethod = self.goalDirection
         self.homeNode.denyAccess(DOWN, self)
 
@@ -54,7 +54,7 @@ class Ghost(Entity):
     def startSpawn(self):
         self.mode.setSpawnMode()
         if self.mode.current == SPAWN:
-            self.setSpeed(150)
+            self.setSpeed(2*ENTITY_SPEED)
             self.directionMethod = self.goalDirection
             self.spawn()
 
@@ -72,6 +72,8 @@ class Blinky(Ghost):
         self.color = RED
         self.sprites = GhostSprites(self)
 
+    def scatter(self):
+        self.goal = Vector2(TILEWIDTH*NCOLS, 0)
         
 class Pinky(Ghost):
 
@@ -80,9 +82,6 @@ class Pinky(Ghost):
         self.name = PINKY
         self.color = PINK
         self.sprites = GhostSprites(self)
-
-    def scatter(self):
-        self.goal = Vector2(TILEWIDTH*NCOLS, 0)
 
     def chase(self):
         self.goal = self.pacman.position + \

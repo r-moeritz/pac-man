@@ -16,6 +16,8 @@ class GameController(object):
         pygame.init()
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
         self.background = None
+        self.background_norm = None
+        self.background_flash = None
         self.clock = pygame.time.Clock()
         self.fruit = None
         self.pause = Pause(True)
@@ -24,6 +26,9 @@ class GameController(object):
         self.score = 0
         self.textgroup = TextGroup()
         self.lifesprites = LifeSprites(self.lives)
+        self.flashBG = False
+        self.flashTime = 0.2
+        self.flashTimer = 0
 
     def restartGame(self):
         self.lives = 3
@@ -53,10 +58,17 @@ class GameController(object):
         self.textgroup.updateLevel(self.level)
 
     def setBackground(self):
-        self.background = pygame.surface.Surface(SCREENSIZE).convert()
-        self.background.fill(BLACK)
+        self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
+        self.background_norm.fill(BLACK)
+        self.background_flash = pygame.surface.Surface(SCREENSIZE).convert()
+        self.background_flash.fill(BLACK)
+        self.background_norm = self.mazesprites.constructBackground(self.background_norm, 0)
+        self.background_flash = self.mazesprites.constructBackground(self.background_flash, 5)
+        self.flashBG = False
+        self.background = self.background_norm
 
     def startGame(self):
+        self.mazesprites = MazeSprites('maze.txt', 'mazerot.txt')
         self.setBackground()
         self.nodes = NodeGroup('maze.txt')
         self.nodes.setPortalPair((0,17), (27,17))
@@ -81,8 +93,6 @@ class GameController(object):
         self.nodes.denyAccessList(15, 14, UP, self.ghosts)
         self.nodes.denyAccessList(12, 26, UP, self.ghosts)
         self.nodes.denyAccessList(15, 26, UP, self.ghosts)
-        self.mazesprites = MazeSprites('maze.txt', 'mazerot.txt')
-        self.background = self.mazesprites.constructBackground(self.background, self.level%5)
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
@@ -101,7 +111,16 @@ class GameController(object):
             if not self.pause.paused:
                 self.pacman.update(dt)
         else:
-            self.pacman.update(dt)                
+            self.pacman.update(dt)
+
+        if self.flashBG:
+            self.flashTimer += dt
+            if self.flashTimer >= self.flashTime:
+                self.flashTimer = 0
+                if self.background == self.background_norm:
+                    self.background = self.background_flash
+                else:
+                    self.background = self.background_norm
             
         afterPauseMethod = self.pause.update(dt)
         if afterPauseMethod is not None:
@@ -198,6 +217,7 @@ class GameController(object):
         if pellet.name is POWERPELLET:
             self.ghosts.startFright()
         if self.pellets.isEmpty():
+            self.flashBG = True
             self.hideEntities()
             self.pause.setPause(pauseTime=3, func=self.nextLevel)
 
