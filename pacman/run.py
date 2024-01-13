@@ -135,7 +135,7 @@ class GameController(object):
         self.textgroup.updateScore(self.score)
 
     def checkFruitEvents(self):
-        if (self.pellets.numEaten == 50 or self.pellets.numEaten == 140) \
+        if (self.pellets.numEaten == 70 or self.pellets.numEaten == 170) \
            and self.fruit is None:
             self.fruit = Fruit(self.nodes.getNodeFromTiles(9, 20), self.level)
 
