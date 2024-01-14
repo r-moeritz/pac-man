@@ -2,8 +2,16 @@ from constants import *
 
 class MainMode(object):
 
-    def __init__(self):
+    cycles = { 0: ((7, 20), (7, 20), (5, 20), (5, float('inf'))),
+               1: ((7, 20), (7, 20), (5, 1033), (.017, float('inf'))),
+               2: ((7, 20), (7, 20), (5, 1033), (.017, float('inf'))),
+               3: ((7, 20), (7, 20), (5, 1033), (.017, float('inf'))),
+               4: ((5, 20), (5, 20), (5, 1037), (.017, float('inf'))) }
+    
+    def __init__(self, level):
         self.timer = 0
+        self.cycle = 0
+        self.level = level
         self.scatter()
 
     def update(self, dt):
@@ -17,21 +25,23 @@ class MainMode(object):
 
     def scatter(self):
         self.mode = SCATTER
-        self.time = 7
+        self.time = self.cycles[self.level if self.level < 4 else 4][self.cycle][0]
         self.timer = 0
 
     def chase(self):
         self.mode = CHASE
-        self.time = 20
+        self.time = self.cycles[self.level if self.level < 4 else 4][self.cycle][1]
+        if self.cycle < 3:
+            self.cycle += 1
         self.timer = 0
 
         
 class ModeController(object):
 
-    def __init__(self, entity):
+    def __init__(self, entity, level):
         self.timer = 0
         self.time = None
-        self.mainmode = MainMode()
+        self.mainmode = MainMode(level)
         self.current = self.mainmode.mode
         self.entity = entity
 

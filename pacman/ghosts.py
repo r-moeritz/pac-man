@@ -21,7 +21,7 @@ class Ghost(Entity):
         self.goal = Vector2()
         self.directionMethod = self.goalDirection
         self.pacman = pacman
-        self.mode = ModeController(self)
+        self.mode = ModeController(self, pacman.level)
         self.blinky = blinky
         self.homeNode = node
         self.setSpeed(self.speeds[pacman.level if pacman.level < 4 else 4][0])
