@@ -82,6 +82,9 @@ class GhostSprites(Spritesheet):
         self.x = { BLINKY:0, PINKY:2, INKY:4, CLYDE:6 }
         self.entity = entity
         self.entity.image = self.getStartImage()
+        self.flashTime = 0.2
+        self.flashTimer = 0
+        self.flashed = False
 
     def getStartImage(self):
         return self.getImage(self.x[self.entity.name], 4)
@@ -100,9 +103,20 @@ class GhostSprites(Spritesheet):
                 self.entity.image = self.getImage(x, 6)
             elif self.entity.direction == UP:
                 self.entity.image = self.getImage(x, 4)
-        elif self.entity.mode.current == FRIGHT:
-            self.entity.image = self.getImage(10, 4)
-        elif self.entity.mode.current == SPAWN:
+        elif self.entity.mode.current is FRIGHT:
+            if self.entity.mode.flashing:
+                self.flashTimer += dt
+                if self.flashTimer >= self.flashTime:
+                    self.flashTimer = 0
+                    if self.flashed:
+                        self.entity.image = self.getImage(10, 6)
+                        self.flashed = False
+                    else:
+                        self.entity.image = self.getImage(10, 4)
+                        self.flashed = True
+            else:
+                self.entity.image = self.getImage(10, 4)
+        elif self.entity.mode.current is SPAWN:
             if self.entity.direction == LEFT:
                 self.entity.image = self.getImage(8, 8)
             elif self.entity.direction == RIGHT:

@@ -44,14 +44,20 @@ class ModeController(object):
         self.mainmode = MainMode(level)
         self.current = self.mainmode.mode
         self.entity = entity
+        self.flashing = False
 
     def update(self, dt):
         self.mainmode.update(dt)
         if self.current is FRIGHT:
             self.timer += dt
             if self.timer >= self.time:
-                self.entity.normalMode()
-                self.current = self.mainmode.mode
+                if not self.flashing:
+                    self.flashing = True
+                    self.time += 2
+                else:
+                    self.flashing = False
+                    self.entity.normalMode()
+                    self.current = self.mainmode.mode
         elif self.current in [SCATTER, CHASE]:            
             self.current = self.mainmode.mode
 
@@ -66,7 +72,7 @@ class ModeController(object):
     def setFrightMode(self):
         if self.current in [SCATTER, CHASE]:
             self.timer = 0
-            self.time = 7
+            self.time = 5
             self.current = FRIGHT
         elif self.current is FRIGHT:
             self.timer = 0
