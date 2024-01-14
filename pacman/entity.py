@@ -18,7 +18,6 @@ class Entity(object):
         self.collideRadius = 5
         self.color = WHITE
         self.visible = True
-        self.disablePortal = False
         self.goal = None
         self.directionMethod = self.randomDirection
         self.setStartNode(node)
@@ -85,7 +84,7 @@ class Entity(object):
             self.node = self.target
             directions = self.validDirections()
             direction = self.directionMethod(directions)
-            if not self.disablePortal and self.node.neighbors[PORTAL] is not None:
+            if self.node.neighbors[PORTAL] is not None:
                 self.node = self.node.neighbors[PORTAL]
             self.target = self.getNewTarget(direction)
             if self.target is not self.node:
