@@ -58,12 +58,15 @@ class ModeController(object):
                     self.flashing = False
                     self.entity.normalMode()
                     self.current = self.mainmode.mode
-        elif self.current in [SCATTER, CHASE]:            
+        elif self.current in [SCATTER, CHASE]:
+            self.flashing = False
             self.current = self.mainmode.mode
 
-        if self.current is SPAWN and self.entity.node == self.entity.spawnNode:
-            self.entity.normalMode()
-            self.current = self.mainmode.mode
+        if self.current is SPAWN:
+            self.flashing = False
+            if self.entity.node == self.entity.spawnNode:
+                self.entity.normalMode()
+                self.current = self.mainmode.mode
 
     def setSpawnMode(self):
         if self.current is FRIGHT:

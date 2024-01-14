@@ -95,6 +95,8 @@ class GhostSprites(Spritesheet):
     def update(self, dt):
         x = self.x[self.entity.name]
         if self.entity.mode.current in [SCATTER, CHASE]:
+            self.flashTimer = 0
+            self.flashed = False
             if self.entity.direction == LEFT:
                 self.entity.image = self.getImage(x, 8)
             elif self.entity.direction == RIGHT:
@@ -117,6 +119,8 @@ class GhostSprites(Spritesheet):
             else:
                 self.entity.image = self.getImage(10, 4)
         elif self.entity.mode.current is SPAWN:
+            self.flashTimer = 0
+            self.flashed = False
             if self.entity.direction == LEFT:
                 self.entity.image = self.getImage(8, 8)
             elif self.entity.direction == RIGHT:
@@ -125,7 +129,7 @@ class GhostSprites(Spritesheet):
                 self.entity.image = self.getImage(8, 6)
             elif self.entity.direction == UP:
                self.entity.image = self.getImage(8, 4)
-    
+
 
 class FruitSprites(Spritesheet):
 
