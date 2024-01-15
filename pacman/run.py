@@ -40,7 +40,6 @@ class GameController(object):
         self.score = 0
         self.startGame()
         self.textgroup.updateScore(self.score)
-        self.textgroup.updateLevel(self.level)
         self.textgroup.showText(READYTXT)
         self.lastFruit = [FruitSprites(self.level)]
 
@@ -57,7 +56,6 @@ class GameController(object):
         self.pause.paused = True
         self.fruit = None
         self.startGame()
-        self.textgroup.updateLevel(self.level)
         if len(self.lastFruit) == 7:
             self.lastFruit.pop(0)
         self.lastFruit.append(FruitSprites(self.level))
