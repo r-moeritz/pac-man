@@ -3,6 +3,7 @@ from entity import Entity
 from constants import *
 from sprites import FruitSprites
 
+# points for fruit by level
 POINTS = { 0: 100, # cherries
            1: 300, # strawberry
            2: 500, # orange

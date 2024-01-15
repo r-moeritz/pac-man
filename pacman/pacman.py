@@ -7,6 +7,7 @@ from sprites import PacmanSprites
 
 class Pacman(Entity):
 
+    # normal and pellet-eating speeds by level
     speeds = { 0: (int(SPEED*.8), int(SPEED*.71)),
                1: (int(SPEED*.9), int(SPEED*.79)),
                2: (int(SPEED*.9), int(SPEED*.79)),
