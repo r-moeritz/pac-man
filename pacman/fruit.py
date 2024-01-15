@@ -29,7 +29,7 @@ class Fruit(Entity):
         self.destroy = False
         self.points = POINTS[level] if level < 12 else POINTS[12]
         self.setBetweenNodes(RIGHT)
-        self.sprites = FruitSprites(self, level)
+        self.image = FruitSprites(level).image
 
     def update(self, dt):
         self.timer += dt

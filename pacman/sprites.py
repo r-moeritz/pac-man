@@ -147,10 +147,9 @@ class FruitSprites(Spritesheet):
                 11: (18,10), # bell
                 12: (20,10) } # key
     
-    def __init__(self, entity, level):
+    def __init__(self, level):
         Spritesheet.__init__(self)
-        self.entity = entity
-        self.entity.image = self.getStartImage(level if level < 12 else 12)
+        self.image = self.getStartImage(level if level < 12 else 12)
 
     def getStartImage(self, key):
         return self.getImage(*self.sprites[key])

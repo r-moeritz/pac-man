@@ -8,7 +8,7 @@ from ghosts import GhostGroup
 from fruit import Fruit
 from pause import Pause
 from text import TextGroup
-from sprites import LifeSprites, MazeSprites
+from sprites import LifeSprites, MazeSprites, FruitSprites
 
 class GameController(object):
     
@@ -29,7 +29,7 @@ class GameController(object):
         self.flashBG = False
         self.flashTime = 0.2
         self.flashTimer = 0
-        self.fruitCaptured = []
+        self.lastFruit = [FruitSprites(self.level)]
 
     def restartGame(self):
         self.lives = 3
@@ -42,7 +42,7 @@ class GameController(object):
         self.textgroup.updateScore(self.score)
         self.textgroup.updateLevel(self.level)
         self.textgroup.showText(READYTXT)
-        self.fruitCaptured = []
+        self.lastFruit = [FruitSprites(self.level)]
 
     def resetLevel(self):
         self.pause.paused = True
@@ -58,6 +58,9 @@ class GameController(object):
         self.fruit = None
         self.startGame()
         self.textgroup.updateLevel(self.level)
+        if len(self.lastFruit) == 7:
+            self.lastFruit.pop(0)
+        self.lastFruit.append(FruitSprites(self.level))
 
     def setBackground(self):
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
@@ -147,13 +150,6 @@ class GameController(object):
                                    self.fruit.position.x,
                                    self.fruit.position.y,
                                    8, time=1)
-            fruitCaptured = False
-            for fruit in self.fruitCaptured:
-                if fruit.get_offset() == self.fruit.image.get_offset():
-                    fruitCaptured = True
-                    break
-            if not fruitCaptured:
-                self.fruitCaptured.append(self.fruit.image)
             self.fruit = None
         elif self.fruit.destroy:
             self.fruit = None
@@ -210,10 +206,10 @@ class GameController(object):
             x = self.lifesprites.images[i].get_width() * i
             y = SCREENHEIGHT - self.lifesprites.images[i].get_height()
             self.screen.blit(self.lifesprites.images[i], (x, y))
-        for i in range(len(self.fruitCaptured)):
-            x = SCREENWIDTH - self.fruitCaptured[i].get_width() * (i+1)
-            y = SCREENHEIGHT - self.fruitCaptured[i].get_height()
-            self.screen.blit(self.fruitCaptured[i], (x, y))
+        for i in range(len(self.lastFruit)):
+            x = SCREENWIDTH - self.lastFruit[i].image.get_width() * (i+1)
+            y = SCREENHEIGHT - self.lastFruit[i].image.get_height()
+            self.screen.blit(self.lastFruit[i].image, (x, y))
         pygame.display.update()
 
     def checkPelletEvents(self):
