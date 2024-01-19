@@ -9,6 +9,7 @@ from fruit import Fruit
 from pause import Pause
 from text import TextGroup
 from sprites import LifeSprites, MazeSprites, FruitSprites
+from hiscore import HighScore
 
 class GameController(object):
     
@@ -24,12 +25,14 @@ class GameController(object):
         self.level = 0
         self.lives = 3
         self.score = 0
+        self.hiscore = HighScore()
         self.textgroup = TextGroup()
         self.lifesprites = LifeSprites(self.lives)
         self.flashBG = False
         self.flashTime = 0.2
         self.flashTimer = 0
         self.lastFruit = [FruitSprites(self.level)]
+        self.textgroup.updateScores(self.score, self.hiscore)
 
     def restartGame(self):
         self.lives = 3
@@ -39,7 +42,7 @@ class GameController(object):
         self.fruit = None
         self.score = 0
         self.startGame()
-        self.textgroup.updateScore(self.score)
+        self.textgroup.updateScores(self.score, self.hiscore)
         self.textgroup.showText(READYTXT)
         self.lastFruit = [FruitSprites(self.level)]
 
@@ -133,7 +136,8 @@ class GameController(object):
 
     def updateScore(self, points):
         self.score += points
-        self.textgroup.updateScore(self.score)
+        self.hiscore.set(self.score)
+        self.textgroup.updateScores(self.score, self.hiscore)
 
     def checkFruitEvents(self):
         if (self.pellets.numEaten == 70 or self.pellets.numEaten == 170) \
