@@ -4,19 +4,19 @@ from constants import *
 from sprites import FruitSprites
 
 # points for fruit by level
-POINTS = { 0: 100, # cherries
-           1: 300, # strawberry
-           2: 500, # orange
-           3: 500, # orange
-           4: 700, # apple
-           5: 700, # apple
-           6: 1000, # pineapple
-           7: 1000, # pineapple
-           8: 2000, # bird
-           9: 2000, # bird
-           10: 3000, # bell
-           11: 3000, # bell
-           12: 5000 } # key
+POINTS = ( 100, # cherries
+           300, # strawberry
+           500, # orange
+           500, # orange
+           700, # apple
+           700, # apple
+           1000, # pineapple
+           1000, # pineapple
+           2000, # bird
+           2000, # bird
+           3000, # bell
+           3000, # bell
+           5000 ) # key
 
 class Fruit(Entity):
 

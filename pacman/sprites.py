@@ -133,19 +133,19 @@ class GhostSprites(Spritesheet):
 
 class FruitSprites(Spritesheet):
 
-    sprites = { 0: (14,8), # cherries
-                1: (16,8), # strawberry
-                2: (18,8), # orange
-                3: (18,8), # orange
-                4: (20,8), # apple
-                5: (20,8), # apple
-                6: (14,10), # pineapple
-                7: (14,10), # pineapple
-                8: (16,10), # bird
-                9: (16,10), # bird
-                10: (18,10), # bell
-                11: (18,10), # bell
-                12: (20,10) } # key
+    sprites = ( (14,8), # cherries
+                (16,8), # strawberry
+                (18,8), # orange
+                (18,8), # orange
+                (20,8), # apple
+                (20,8), # apple
+                (14,10), # pineapple
+                (14,10), # pineapple
+                (16,10), # bird
+                (16,10), # bird
+                (18,10), # bell
+                (18,10), # bell
+                (20,10) )  # key
     
     def __init__(self, level):
         Spritesheet.__init__(self)

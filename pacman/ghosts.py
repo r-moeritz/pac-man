@@ -9,11 +9,11 @@ from sprites import GhostSprites
 class Ghost(Entity):
 
     # normal, fright, and portal speeds by level
-    speeds = { 0: (int(SPEED*.75), int(SPEED*.5), int(SPEED*.4)),
-               1: (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
-               2: (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
-               3: (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
-               4: (int(SPEED*.95), int(SPEED*.6), int(SPEED*.5)) }
+    speeds = ( (int(SPEED*.75), int(SPEED*.5), int(SPEED*.4)),
+               (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
+               (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
+               (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
+               (int(SPEED*.95), int(SPEED*.6), int(SPEED*.5)) )
     
     def __init__(self, node, pacman, blinky=None):
         Entity.__init__(self, node)

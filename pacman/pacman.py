@@ -7,28 +7,28 @@ from sprites import PacmanSprites
 
 class Pacman(Entity):
 
-    # normal and pellet-eating speeds by level
-    speeds = { 0: (int(SPEED*.8), int(SPEED*.71)),
-               1: (int(SPEED*.9), int(SPEED*.79)),
-               2: (int(SPEED*.9), int(SPEED*.79)),
-               3: (int(SPEED*.9), int(SPEED*.79)),
-               4: (SPEED, int(SPEED*.87)),
-               5: (SPEED, int(SPEED*.87)),
-               6: (SPEED, int(SPEED*.87)),
-               7: (SPEED, int(SPEED*.87)),
-               8: (SPEED, int(SPEED*.87)),
-               9: (SPEED, int(SPEED*.87)),
-               10: (SPEED, int(SPEED*.87)),
-               11: (SPEED, int(SPEED*.87)),
-               12: (SPEED, int(SPEED*.87)),
-               13: (SPEED, int(SPEED*.87)),
-               14: (SPEED, int(SPEED*.87)),
-               15: (SPEED, int(SPEED*.87)),
-               16: (SPEED, int(SPEED*.87)),
-               17: (SPEED, int(SPEED*.87)),
-               18: (SPEED, int(SPEED*.87)),
-               19: (SPEED, int(SPEED*.87)),
-               20: (int(SPEED*.9), int(SPEED*.79)) }
+    # normal, pellet-eating, fright-mode, and fright-mode+pellet-eating speeds by level
+    speeds = ( (int(SPEED*.8), int(SPEED*.71), int(SPEED*.9), int(SPEED*.79)),
+               (int(SPEED*.9), int(SPEED*.79), int(SPEED*.95), int(SPEED*.83)),
+               (int(SPEED*.9), int(SPEED*.79), int(SPEED*.95), int(SPEED*.83)),
+               (int(SPEED*.9), int(SPEED*.79), int(SPEED*.95), int(SPEED*.83)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
+               (int(SPEED*.9), int(SPEED*.79), int(SPEED*.95), int(SPEED*.83)) )
     
     def __init__(self, node, level):
         Entity.__init__(self, node)
