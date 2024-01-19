@@ -4,6 +4,7 @@ from vector import Vector2
 from constants import *
 from entity import Entity
 from sprites import PacmanSprites
+from modes import PacmanModeController
 
 class Pacman(Entity):
 
@@ -39,7 +40,8 @@ class Pacman(Entity):
         self.alive = True
         self.level = level
         self.sprites = PacmanSprites(self)
-        self.setSpeed(self.speeds[level if level < 20 else 20][0])
+        self.setSpeed(self.speeds[level if level < len(self.speeds) else -1][0])
+        self.mode = PacmanModeController(self, self.level)
 
     def reset(self):
         Entity.reset(self)
@@ -48,14 +50,16 @@ class Pacman(Entity):
         self.alive = True
         self.image = self.sprites.getStartImage()
         self.sprites.reset()
-        self.setSpeed(self.speeds[self.level if self.level < 20 else 20][0])
+        self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])
 
     def die(self):
         self.alive = False
         self.direction = STOP
+        self.normalMode()
 
     def update(self, dt):
         self.sprites.update(dt)
+        self.mode.update(dt)
         self.position += self.directions[self.direction] * self.speed * dt
         dir = self.getValidKey()
         if self.overshotTarget():
@@ -96,7 +100,10 @@ class Pacman(Entity):
             if self.collideCheck(pellet):
                 eat = pellet
                 break
-        self.setSpeed(self.speeds[self.level if self.level < 20 else 20][1 if eat else 0])
+        if self.mode.fright:
+            self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][3 if eat else 2])
+        else:
+            self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][1 if eat else 0])
         return eat
 
     def collideGhost(self, ghost):
@@ -107,3 +114,10 @@ class Pacman(Entity):
         dSquared = d.magnitudeSquared()
         rSquared = (other.radius + self.collideRadius)**2
         return dSquared <= rSquared
+
+    def startFright(self):
+        self.mode.setFrightMode()
+        self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][2])
+
+    def normalMode(self):
+        self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])

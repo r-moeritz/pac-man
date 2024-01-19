@@ -24,10 +24,10 @@ class Fruit(Entity):
         Entity.__init__(self, node)
         self.name = FRUIT
         self.color = GREEN
-        self.lifespan = 9.5
+        self.lifespan = 9.5 # actually varies between 9.33 and 9.75 seconds but couldn't be bothered
         self.timer = 0
         self.destroy = False
-        self.points = POINTS[level] if level < 12 else POINTS[12]
+        self.points = POINTS[level] if level < len(POINTS) else POINTS[-1]
         self.setBetweenNodes(RIGHT)
         self.image = FruitSprites(level).image
 

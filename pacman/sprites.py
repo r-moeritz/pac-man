@@ -149,13 +149,13 @@ class FruitSprites(Spritesheet):
     
     def __init__(self, level):
         Spritesheet.__init__(self)
-        self.image = self.getStartImage(level if level < 12 else 12)
+        self.image = self.getStartImage(level if level < len(self.sprites) else -1)
 
     def getStartImage(self, key):
         return self.getImage(*self.sprites[key])
 
     def getImage(self, x, y):
-        return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)        
+        return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
 
 class LifeSprites(Spritesheet):

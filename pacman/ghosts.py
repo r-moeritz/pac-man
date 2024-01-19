@@ -3,7 +3,7 @@ from pygame.locals import *
 from vector import Vector2
 from constants import *
 from entity import Entity
-from modes import ModeController
+from modes import GhostModeController
 from sprites import GhostSprites
 
 class Ghost(Entity):
@@ -23,10 +23,10 @@ class Ghost(Entity):
         self.directionMethod = self.goalDirection
         self.pacman = pacman
         self.level = pacman.level
-        self.mode = ModeController(self, self.level)
+        self.mode = GhostModeController(self, self.level)
         self.blinky = blinky
         self.homeNode = node
-        self.setSpeed(self.speeds[self.level if self.level < 4 else 4][0])
+        self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])
 
     def update(self, dt):
         self.sprites.update(dt)
@@ -38,7 +38,7 @@ class Ghost(Entity):
         if self.mode.current in (SCATTER, CHASE):
             # Slow down in portal or speed back up
             i = 0 if self.node.neighbors[PORTAL] is None else 2
-            self.setSpeed(self.speeds[self.level if self.level < 4 else 4][i])
+            self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][i])
         Entity.update(self, dt)
 
     def scatter(self):
@@ -50,11 +50,11 @@ class Ghost(Entity):
     def startFright(self):
         self.mode.setFrightMode()
         if self.mode.current is FRIGHT:
-            self.setSpeed(self.speeds[self.level if self.level < 4 else 4][1])
+            self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][1])
             self.directionMethod = self.randomDirection
 
     def normalMode(self):
-        self.setSpeed(self.speeds[self.level if self.level < 4 else 4][0])
+        self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])
         self.directionMethod = self.goalDirection
         self.homeNode.denyAccess(DOWN, self)
 
@@ -66,14 +66,14 @@ class Ghost(Entity):
 
     def startSpawn(self):
         self.mode.setSpawnMode()
-        if self.mode.current == SPAWN:
-            self.setSpeed(2 * self.speeds[self.level if self.level < 4 else 4][0])
+        if self.mode.current is SPAWN:
+            self.setSpeed(2 * self.speeds[self.level if self.level < len(self.speeds) else -1][0])
             self.directionMethod = self.goalDirection
             self.spawn()
 
     def reset(self):
         Entity.reset(self)
-        self.setSpeed(self.speeds[self.level if self.level < 4 else 4][0])
+        self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])
         self.points = 200
         self.directionmethod = self.goalDirection
 
@@ -143,6 +143,7 @@ class Clyde(Ghost):
 class GhostGroup(object):
 
     def __init__(self, node, pacman):
+        self.pacman = pacman
         self.blinky = Blinky(node, pacman)
         self.pinky = Pinky(node, pacman)
         self.inky = Inky(node, pacman, self.blinky)
@@ -159,6 +160,7 @@ class GhostGroup(object):
     def startFright(self):
         for ghost in self:
             ghost.startFright()
+        self.pacman.startFright()
         self.resetPoints()
 
     def setSpawnNode(self, node):

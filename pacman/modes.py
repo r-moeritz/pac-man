@@ -1,6 +1,6 @@
 from constants import *
 
-class MainMode(object):
+class GhostMainMode(object):
 
     # times for scatter/chase mode cycles by level
     cycles = ( ((7, 20), (7, 20), (5, 20), (5, float('inf'))),
@@ -26,28 +26,28 @@ class MainMode(object):
 
     def scatter(self):
         self.mode = SCATTER
-        self.time = self.cycles[self.level if self.level < 4 else 4][self.cycle][0]
+        self.time = self.cycles[self.level if self.level < len(self.cycles) else -1][self.cycle][0]
         self.timer = 0
 
     def chase(self):
         self.mode = CHASE
-        self.time = self.cycles[self.level if self.level < 4 else 4][self.cycle][1]
+        self.time = self.cycles[self.level if self.level < len(self.cycles) else -1][self.cycle][1]
         if self.cycle < 3:
             self.cycle += 1
         self.timer = 0
 
 
-class ModeController(object):
+# fright times by level
+FRIGHT_TIMES = ( 6, 5, 4, 3, 2, 5, 2, 2,
+                 1, 5, 2, 1, 1, 3, 1 )
+        
+class GhostModeController(object):
 
-    # fright times by level
-    frightTimes = ( 6, 5, 4, 3, 2, 5, 2, 2,
-                    1, 5, 2, 1, 1, 3, 1 )
-    
     def __init__(self, entity, level):
         self.timer = 0
         self.time = None
         self.level = level
-        self.mainmode = MainMode(level)
+        self.mainmode = GhostMainMode(level)
         self.current = self.mainmode.mode
         self.entity = entity
         self.flashing = False
@@ -60,7 +60,7 @@ class ModeController(object):
             if self.timer >= self.time:
                 if not self.flashing:
                     self.flashing = True
-                    self.time += int(self.frightTimes[self.level if self.level < 14 else 14] * .4)
+                    self.time += int(FRIGHT_TIMES[self.level if self.level < len(FRIGHT_TIMES) else -1] * .4)
                 else:
                     self.flashing = False
                     self.entity.normalMode()
@@ -77,13 +77,38 @@ class ModeController(object):
 
     def setSpawnMode(self):
         if self.current is FRIGHT:
-            self.current = SPAWN                
+            self.current = SPAWN
 
     def setFrightMode(self):
         if self.current in (SCATTER, CHASE):
             self.timer = 0
-
-            self.time = int(self.frightTimes[self.level if self.level < 14 else 14] * .6)
+            self.time = int(FRIGHT_TIMES[self.level if self.level < len(FRIGHT_TIMES) else -1] * .6)
             self.current = FRIGHT
         elif self.current is FRIGHT:
             self.timer = 0
+
+
+class PacmanModeController(object):
+
+    def __init__(self, entity, level):
+        self.timer = 0
+        self.time = None
+        self.fright = False
+        self.entity = entity
+        self.level = level
+
+    def update(self, dt):
+        if not self.fright:
+            return
+        self.timer += dt
+        if self.timer < self.time:
+            return
+        self.fright = False
+        self.entity.normalMode()
+
+    def setFrightMode(self):
+        self.timer = 0
+        if self.fright:
+            return
+        self.fright = True
+        self.time = FRIGHT_TIMES[self.level if self.level < len(FRIGHT_TIMES) else -1]
