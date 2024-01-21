@@ -70,6 +70,10 @@ class PelletGroup(object):
     def isEmpty(self):
         return True if len(self.pelletList) == 0 else False
 
+    @property
+    def remaining(self):
+        return len(self.pelletList)
+
     def render(self, screen):
         for pellet in self.pelletList:
             pellet.render(screen)

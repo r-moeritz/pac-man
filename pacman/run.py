@@ -23,7 +23,7 @@ class GameController(object):
         self.fruit = None
         self.pause = Pause(True)
         self.level = 0
-        self.lives = 3
+        self.lives = 5
         self.score = 0
         self.hiscore = HighScore()
         self.textgroup = TextGroup()
@@ -35,7 +35,7 @@ class GameController(object):
         self.textgroup.updateScores(self.score, self.hiscore)
 
     def restartGame(self):
-        self.lives = 3
+        self.lives = 5
         self.lifesprites.resetLives(self.lives)
         self.level = 0
         self.pause.paused = True
@@ -83,7 +83,7 @@ class GameController(object):
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)        
         self.pacman = Pacman(self.nodes.getNodeFromTiles(15, 26), self.level)        
         self.pellets = PelletGroup('maze.txt')
-        self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
+        self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman, self.pellets)
         self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
         self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
         self.ghosts.inky.setStartNode(self.nodes.getNodeFromTiles(0+11.5, 3+14))
@@ -231,6 +231,8 @@ class GameController(object):
             self.flashBG = True
             self.hideEntities()
             self.pause.setPause(pauseTime=3, func=self.nextLevel)
+        elif self.ghosts.blinky.isElroy:
+            self.ghosts.blinky.setElroySpeed()
 
     def showEntities(self):
         self.pacman.visible = True

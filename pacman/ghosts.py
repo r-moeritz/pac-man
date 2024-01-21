@@ -80,15 +80,76 @@ class Ghost(Entity):
         
 class Blinky(Ghost):
 
-    def __init__(self, node, pacman, blinky=None):
+    # Elroy dots left, speed by level
+    elroy1 = ( (20, int(SPEED*.8)),
+               (30, int(SPEED*.9)),
+               (40, int(SPEED*.9)),
+               (40, int(SPEED*.9)),
+               (40, SPEED),
+               (50, SPEED),
+               (50, SPEED),
+               (50, SPEED),
+               (60, SPEED),
+               (60, SPEED),
+               (60, SPEED),
+               (80, SPEED),
+               (80, SPEED),
+               (80, SPEED),
+               (100, SPEED),
+               (100, SPEED),
+               (100, SPEED),
+               (100, SPEED),
+               (120, SPEED) )
+    elroy2 = ( (10, int(SPEED*.85)),
+               (15, int(SPEED*.95)),
+               (20, int(SPEED*.95)),
+               (20, int(SPEED*.95)),
+               (20, int(SPEED*1.05)),
+               (25, int(SPEED*1.05)),
+               (25, int(SPEED*1.05)),
+               (25, int(SPEED*1.05)),
+               (30, int(SPEED*1.05)),
+               (30, int(SPEED*1.05)),
+               (30, int(SPEED*1.05)),
+               (40, int(SPEED*1.05)),
+               (40, int(SPEED*1.05)),
+               (40, int(SPEED*1.05)),
+               (50, int(SPEED*1.05)),
+               (50, int(SPEED*1.05)),
+               (50, int(SPEED*1.05)),
+               (50, int(SPEED*1.05)),
+               (60, int(SPEED*1.05)) )
+
+    def __init__(self, node, pacman, pellets, blinky=None):
+        self.pellets = pellets
         Ghost.__init__(self, node, pacman, blinky)
         self.name = BLINKY
         self.color = RED
         self.sprites = GhostSprites(self)
+        self.level = pacman.level
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, 0)
+
+    def setSpeed(self, speed):
+        self.setElroySpeed() if self.isElroy else Entity.setSpeed(self, speed)
+
+    def setElroySpeed(self):
+        Entity.setSpeed(self, self.elroySpeed)
         
+    @property
+    def isElroy(self):
+        return self.mode.current in (CHASE, SCATTER) \
+            and self.elroy1[self.level if self.level < len(self.elroy1) else -1][0] >= self.pellets.remaining
+
+    @property
+    def elroySpeed(self):
+        elroy2dots = self.elroy2[self.level if self.level < len(self.elroy2) else -1][0]
+        return self.elroy2[self.level if self.level < len(self.elroy2) else -1][1] \
+            if elroy2dots >= self.pellets.remaining \
+            else self.elroy1[self.level if self.level < len(self.elroy1) else -1][1]
+
+
 class Pinky(Ghost):
 
     def __init__(self, node, pacman, blinky=None):
@@ -142,9 +203,9 @@ class Clyde(Ghost):
             
 class GhostGroup(object):
 
-    def __init__(self, node, pacman):
+    def __init__(self, node, pacman, pellets):
         self.pacman = pacman
-        self.blinky = Blinky(node, pacman)
+        self.blinky = Blinky(node, pacman, pellets)
         self.pinky = Pinky(node, pacman)
         self.inky = Inky(node, pacman, self.blinky)
         self.clyde = Clyde(node, pacman)
