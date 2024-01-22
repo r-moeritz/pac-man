@@ -224,7 +224,7 @@ class GameController(object):
         self.pellets.pelletList.remove(pellet)
         if pellet.name is POWERPELLET:
             self.ghosts.startFright()
-        if self.pellets.isEmpty():
+        if self.pellets.isEmpty:
             self.flashBG = True
             self.hideEntities()
             self.pause.setPause(pauseTime=3, func=self.nextLevel)

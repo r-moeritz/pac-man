@@ -67,6 +67,7 @@ class PelletGroup(object):
     def readPelletFile(self, textfile):
         return np.loadtxt(textfile, dtype='<U1')
 
+    @property
     def isEmpty(self):
         return True if len(self.pelletList) == 0 else False
 
