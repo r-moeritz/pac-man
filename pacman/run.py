@@ -101,7 +101,7 @@ class GameController(object):
         self.nodes.denyAccessList(15, 26, UP, self.ghosts)
 
     def update(self):
-        dt = self.clock.tick(30) / 1000.0
+        dt = self.clock.tick(75) / 1000.0
         self.textgroup.update(dt)
         self.pellets.update(dt)
 
@@ -186,6 +186,7 @@ class GameController(object):
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
+            
             elif event.type == KEYDOWN and event.key == K_SPACE \
                  and self.pacman.alive:
                 self.pause.setPause(playerPaused=True)
@@ -220,10 +221,6 @@ class GameController(object):
             return
         self.pellets.numEaten += 1
         self.updateScore(pellet.points)
-        if self.pellets.numEaten == 30:
-            self.ghosts.inky.startNode.allowAccess(RIGHT, self.ghosts.inky)
-        elif self.pellets.numEaten == 70:
-            self.ghosts.clyde.startNode.allowAccess(LEFT, self.ghosts.clyde)
         self.pellets.pelletList.remove(pellet)
         if pellet.name is POWERPELLET:
             self.ghosts.startFright()

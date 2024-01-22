@@ -170,6 +170,8 @@ class Inky(Ghost):
         self.name = INKY
         self.color = TEAL
         self.sprites = GhostSprites(self)
+        self.timer = 0
+        self.releaseTime = 6
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, TILEHEIGHT*NROWS)
@@ -179,6 +181,12 @@ class Inky(Ghost):
         vec2 = (vec1 - self.blinky.position) * 2
         self.goal = self.blinky.position + vec2
 
+    def update(self, dt):
+        if not self.name in self.startNode.access[RIGHT]:
+            self.timer += dt
+            if self.timer >= self.releaseTime:
+                self.startNode.allowAccess(RIGHT, self)
+        Ghost.update(self, dt)
         
 class Clyde(Ghost):
 
@@ -187,6 +195,8 @@ class Clyde(Ghost):
         self.name = CLYDE
         self.color = ORANGE
         self.sprites = GhostSprites(self)
+        self.timer = 0
+        self.releaseTime = 10
 
     def scatter(self):
         self.goal = Vector2(0, TILEHEIGHT*NROWS)
@@ -200,6 +210,12 @@ class Clyde(Ghost):
             self.goal = self.pacman.position \
                 + self.pacman.directions[self.pacman.direction] * TILEWIDTH * 4
 
+    def update(self, dt):
+        if not self.name in self.startNode.access[LEFT]:
+            self.timer += dt
+            if self.timer >= self.releaseTime:
+                self.startNode.allowAccess(LEFT, self)
+        Ghost.update(self, dt)
             
 class GhostGroup(object):
 
