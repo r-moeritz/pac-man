@@ -87,17 +87,16 @@ class Pacman(Entity):
     def getValidKey(self):
         if len(self.joysticks) != 0:
             joy = self.joysticks[0]
-            hx,hy = joy.get_hat(0)
-            xa = joy.get_axis(0)
-            ya = joy.get_axis(1)
-            
-            if hy == 1 or ya < -JOY_AXIS_TH:
+            hx,hy = (0, 0) if joy.get_numhats() == 0 else joy.get_hat(0)
+            ax,ay = (0, 0) if joy.get_numaxes() < 2 else (joy.get_axis(0), joy.get_axis(1))
+
+            if hy == 1 or ay < -JOY_AXIS_TH:
                 return UP
-            elif hy == -1 or ya > JOY_AXIS_TH:
+            elif hy == -1 or ay > JOY_AXIS_TH:
                 return DOWN
-            elif hx == -1 or xa < -JOY_AXIS_TH:
+            elif hx == -1 or ax < -JOY_AXIS_TH:
                 return LEFT
-            elif hx == 1 or xa > JOY_AXIS_TH:
+            elif hx == 1 or ax > JOY_AXIS_TH:
                 return RIGHT
         
         key_pressed = pygame.key.get_pressed()

@@ -193,8 +193,8 @@ class GameController(object):
                 joy = self.joysticks[0]
                 if joy.get_instance_id() == event.instance_id:
                     self.joysticks.pop()
-            elif event.type == KEYDOWN and event.key == K_SPACE \
-                 and self.pacman.alive:
+            elif ((event.type == KEYDOWN and event.key == K_SPACE) \
+                  or event.type == JOYBUTTONDOWN) and self.pacman.alive:
                 self.pause.setPause(playerPaused=True)
                 if not self.pause.paused:
                     self.textgroup.hideText()
