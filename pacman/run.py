@@ -16,6 +16,7 @@ class GameController(object):
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
+        self.joysticks = []
         self.background = None
         self.background_norm = None
         self.background_flash = None
@@ -81,7 +82,7 @@ class GameController(object):
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)        
-        self.pacman = Pacman(self.nodes.getNodeFromTiles(15, 26), self.level)        
+        self.pacman = Pacman(self.nodes.getNodeFromTiles(15, 26), self.level, self.joysticks)
         self.pellets = PelletGroup('maze.txt')
         self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman, self.pellets)
         self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
@@ -186,7 +187,12 @@ class GameController(object):
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
-            
+            elif event.type == JOYDEVICEADDED and len(self.joysticks) == 0:
+                self.joysticks.append(pygame.joystick.Joystick(event.device_index))
+            elif event.type == JOYDEVICEREMOVED and len(self.joysticks) != 0:
+                joy = self.joysticks[0]
+                if joy.get_instance_id() == event.instance_id:
+                    self.joysticks.pop()
             elif event.type == KEYDOWN and event.key == K_SPACE \
                  and self.pacman.alive:
                 self.pause.setPause(playerPaused=True)

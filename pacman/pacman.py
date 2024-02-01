@@ -6,6 +6,8 @@ from entity import Entity
 from sprites import PacmanSprites
 from modes import PacmanModeController
 
+JOY_AXIS_TH = .7 # Threshold of joystick x/y axis (between 0 and 1)
+
 class Pacman(Entity):
 
     # normal, pellet-eating, fright-mode, and fright-mode+pellet-eating speeds by level
@@ -31,7 +33,7 @@ class Pacman(Entity):
                (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
                (int(SPEED*.9), int(SPEED*.79), int(SPEED*.95), int(SPEED*.83)) )
     
-    def __init__(self, node, level):
+    def __init__(self, node, level, joysticks):
         Entity.__init__(self, node)
         self.name = PACMAN
         self.color = YELLOW
@@ -39,6 +41,7 @@ class Pacman(Entity):
         self.setBetweenNodes(LEFT)
         self.alive = True
         self.level = level
+        self.joysticks = joysticks
         self.sprites = PacmanSprites(self)
         self.setSpeed(self.speeds[level if level < len(self.speeds) else -1][0])
         self.mode = PacmanModeController(self, self.level)
@@ -82,16 +85,32 @@ class Pacman(Entity):
             self.reverseDirection()
 
     def getValidKey(self):
+        if len(self.joysticks) != 0:
+            joy = self.joysticks[0]
+            hx,hy = joy.get_hat(0)
+            xa = joy.get_axis(0)
+            ya = joy.get_axis(1)
+            
+            if hy == 1 or ya < -JOY_AXIS_TH:
+                return UP
+            elif hy == -1 or ya > JOY_AXIS_TH:
+                return DOWN
+            elif hx == -1 or xa < -JOY_AXIS_TH:
+                return LEFT
+            elif hx == 1 or xa > JOY_AXIS_TH:
+                return RIGHT
+        
         key_pressed = pygame.key.get_pressed()
         if self.alive:
             if key_pressed[K_UP]:
                 return UP
-            if key_pressed[K_DOWN]:
+            elif key_pressed[K_DOWN]:
                 return DOWN
-            if key_pressed[K_LEFT]:
+            elif key_pressed[K_LEFT]:
                 return LEFT
-            if key_pressed[K_RIGHT]:
+            elif key_pressed[K_RIGHT]:
                 return RIGHT
+            
         return STOP
 
     def eatPellets(self, pelletList):
