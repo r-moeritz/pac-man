@@ -102,7 +102,7 @@ class GameController(object):
         self.nodes.denyAccessList(15, 26, UP, self.ghosts)
 
     def update(self):
-        dt = self.clock.tick(75) / 1000.0
+        dt = self.clock.tick(60) / 1000.0
         self.textgroup.update(dt)
         self.pellets.update(dt)
 
@@ -194,7 +194,8 @@ class GameController(object):
                 if joy.get_instance_id() == event.instance_id:
                     self.joysticks.pop()
             elif ((event.type == KEYDOWN and event.key == K_SPACE) \
-                  or event.type == JOYBUTTONDOWN) and self.pacman.alive:
+                  or event.type == JOYBUTTONDOWN) and not self.flashBG \
+                  and self.pacman.alive:
                 self.pause.setPause(playerPaused=True)
                 if not self.pause.paused:
                     self.textgroup.hideText()
