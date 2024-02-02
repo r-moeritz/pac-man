@@ -85,6 +85,9 @@ class Pacman(Entity):
             self.reverseDirection()
 
     def getValidKey(self):
+        if not self.visible or not self.alive:
+            return STOP
+        
         if len(self.joysticks) != 0:
             joy = self.joysticks[0]
             hx,hy = (0, 0) if joy.get_numhats() == 0 else joy.get_hat(0)

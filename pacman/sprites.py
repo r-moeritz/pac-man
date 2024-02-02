@@ -165,7 +165,7 @@ class LifeSprites(Spritesheet):
         self.resetLives(numlives)
 
     def removeImage(self):
-        if len(self.images) > 0:
+        if len(self.images) != 0:
             self.images.pop(0)
 
     def resetLives(self, numlives):

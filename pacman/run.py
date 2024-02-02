@@ -33,6 +33,7 @@ class GameController(object):
         self.flashTime = 0.2
         self.flashTimer = 0
         self.lastFruit = [FruitSprites(self.level)]
+        self.begun = True
         self.textgroup.updateScores(self.score, self.hiscore)
 
     def restartGame(self):
@@ -46,6 +47,7 @@ class GameController(object):
         self.textgroup.updateScores(self.score, self.hiscore)
         self.textgroup.showText(READYTXT)
         self.lastFruit = [FruitSprites(self.level)]
+        self.begun = True
 
     def resetLevel(self):
         self.pause.paused = True
@@ -198,6 +200,10 @@ class GameController(object):
                   and self.pacman.alive:
                 self.pause.setPause(playerPaused=True)
                 if not self.pause.paused:
+                    if self.begun:
+                        self.lives -= 1
+                        self.lifesprites.removeImage()
+                        self.begun = False
                     self.textgroup.hideText()
                     self.showEntities()
                 else:
