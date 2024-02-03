@@ -34,6 +34,7 @@ class GameController(object):
         self.flashTimer = 0
         self.lastFruit = [FruitSprites(self.level)]
         self.begun = True
+        self.gotExtraLife = False
         self.textgroup.updateScores(self.score, self.hiscore)
 
     def restartGame(self):
@@ -233,6 +234,10 @@ class GameController(object):
             return
         self.pellets.numEaten += 1
         self.updateScore(pellet.points)
+        if self.score >= EXTRALIFE and not self.gotExtraLife:
+            self.lives += 1
+            self.lifesprites.addImage()
+            self.gotExtraLife = True
         self.pellets.pelletList.remove(pellet)
         if pellet.name is POWERPELLET:
             self.ghosts.startFright()

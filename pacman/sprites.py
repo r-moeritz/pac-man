@@ -168,6 +168,9 @@ class LifeSprites(Spritesheet):
         if len(self.images) != 0:
             self.images.pop(0)
 
+    def addImage(self):
+        self.images.append(self.getImage(0, 0))
+
     def resetLives(self, numlives):
         self.images = []
         for i in range(numlives):
