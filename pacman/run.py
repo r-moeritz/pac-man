@@ -201,7 +201,6 @@ class GameController(object):
                 self.pause.setPause(playerPaused=True)
                 if not self.pause.paused:
                     if self.begun:
-                        self.lives -= 1
                         self.lifesprites.removeImage()
                         self.begun = False
                     self.textgroup.hideText()
