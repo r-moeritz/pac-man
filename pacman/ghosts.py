@@ -203,7 +203,7 @@ class Clyde(Ghost):
 
     def chase(self):
         d = self.pacman.position - self.position
-        ds = d.magnitudeSquared()
+        ds = d.magnitude_squared()
         if ds <= (TILEWIDTH * 8)**2:
             self.scatter()
         else:

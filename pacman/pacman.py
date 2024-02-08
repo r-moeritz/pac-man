@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-from vector import Vector2
 from constants import *
 from entity import Entity
 from sprites import PacmanSprites
@@ -132,7 +131,7 @@ class Pacman(Entity):
 
     def collideCheck(self, other):
         d = self.position - other.position
-        dSquared = d.magnitudeSquared()
+        dSquared = d.magnitude_squared()
         rSquared = (other.radius + self.collideRadius)**2
         return dSquared <= rSquared
 

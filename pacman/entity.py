@@ -50,8 +50,8 @@ class Entity(object):
 
         vec1 = self.target.position - self.node.position
         vec2 = self.position - self.node.position
-        node2Target = vec1.magnitudeSquared()
-        node2Self = vec2.magnitudeSquared()
+        node2Target = vec1.magnitude_squared()
+        node2Self = vec2.magnitude_squared()
         return node2Self >= node2Target
 
     def reverseDirection(self):
@@ -110,7 +110,7 @@ class Entity(object):
         distances = []
         for direction in directions:
             vec = self.node.position + self.directions[direction]*TILEWIDTH - self.goal
-            distances.append(vec.magnitudeSquared())
+            distances.append(vec.magnitude_squared())
         index = distances.index(min(distances))
         return directions[index]
 
