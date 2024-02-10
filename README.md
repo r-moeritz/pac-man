@@ -6,6 +6,8 @@ This code was initially written to follow the excellent tutorial at
 Pac-Man game in Python. Since then it's been enhanced to make the game
 more faithful to the arcade original.
 
+![Recording](recording.gif)
+
 Setup
 ---
 
@@ -15,3 +17,9 @@ Run
 ---
 
 	make run
+
+Debug
+---
+
+	make debug
+	
