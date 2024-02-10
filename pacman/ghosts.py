@@ -51,6 +51,7 @@ class Ghost(Entity):
         self.mode.setFrightMode()
         if self.mode.current is FRIGHT:
             self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][1])
+            self.reverseDirection()
             self.directionMethod = self.randomDirection
 
     def normalMode(self):
