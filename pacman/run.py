@@ -24,7 +24,7 @@ class GameController(object):
         self.fruit = None
         self.pause = Pause(True)
         self.level = 0
-        self.lives = 5
+        self.lives = NUMLIVES
         self.score = 0
         self.hiscore = HighScore()
         self.textgroup = TextGroup()
@@ -38,7 +38,7 @@ class GameController(object):
         self.textgroup.updateScores(self.score, self.hiscore)
 
     def restartGame(self):
-        self.lives = 5
+        self.lives = NUMLIVES
         self.lifesprites.resetLives(self.lives)
         self.level = 0
         self.pause.paused = True
