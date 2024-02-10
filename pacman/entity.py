@@ -34,10 +34,9 @@ class Entity(object):
         self.position = self.node.position.copy()
 
     def validDirection(self, direction):
-        return True if direction is not STOP \
+        return direction is not STOP \
             and self.name in self.node.access[direction] \
-            and self.node.neighbors[direction] is not None \
-            else False
+            and self.node.neighbors[direction] is not None
 
     def getNewTarget(self, direction):
         return self.node.neighbors[direction] \
@@ -59,10 +58,9 @@ class Entity(object):
         self.node,self.target = self.target,self.node
 
     def oppositeDirection(self, direction):
-        return True if direction is not STOP \
-            and direction == self.direction * - 1 \
-            else False
-
+        return direction is not STOP \
+            and direction == self.direction * - 1
+    
     def setSpeed(self, speed):
         self.speed = speed * TILEWIDTH / 16
 

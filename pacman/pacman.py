@@ -35,7 +35,6 @@ class Pacman(Entity):
     def __init__(self, node, level, joysticks):
         Entity.__init__(self, node)
         self.name = PACMAN
-        self.color = YELLOW
         self.direction = LEFT
         self.setBetweenNodes(LEFT)
         self.alive = True
@@ -62,8 +61,12 @@ class Pacman(Entity):
     def update(self, dt):
         self.sprites.update(dt)
         self.mode.update(dt)
-        self.position += self.directions[self.direction] * self.speed * dt
+
         dir = self.getValidKey()
+        if self.isPreTurn(dir):
+            self.speed *= 2
+        self.position += self.directions[self.direction] * self.speed * dt
+        
         if self.overshotTarget():
             self.node = self.target
             if self.node.neighbors[PORTAL] is not None:
@@ -82,6 +85,25 @@ class Pacman(Entity):
             self.setPosition()
         elif self.oppositeDirection(dir):
             self.reverseDirection()
+
+    def perpendicularDirection(self, direction):
+        return direction is not STOP \
+            and self.direction is not STOP \
+            and abs(abs(direction) - abs(self.direction)) == 1
+            
+    def isPreTurn(self, direction):
+        if self.target is None or not self.perpendicularDirection(direction):
+            return False
+
+        vec1 = self.target.position - self.node.position
+        vec2 = self.position - self.node.position
+        node2Target = vec1.magnitude_squared()
+        node2Self = vec2.magnitude_squared()
+
+        return node2Target > node2Self \
+            and node2Target - node2Self < 512 \
+            and self.name in self.target.access[direction] \
+            and self.target.neighbors[direction] is not None
 
     def getValidKey(self):
         if not self.visible or not self.alive:

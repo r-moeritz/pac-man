@@ -6,3 +6,6 @@ install:
 
 run:
 	. .venv/bin/activate && python pacman/run.py && deactivate
+
+debug:
+	. .venv/bin/activate && python -m pdb pacman/run.py && deactivate
