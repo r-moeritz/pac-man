@@ -101,7 +101,7 @@ class Pacman(Entity):
         node2Self = vec2.magnitude_squared()
 
         return node2Target > node2Self \
-            and node2Target - node2Self < 576 \
+            and node2Target - node2Self < 640 \
             and self.name in self.target.access[direction] \
             and self.target.neighbors[direction] is not None
 

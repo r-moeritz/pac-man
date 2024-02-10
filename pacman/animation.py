@@ -2,7 +2,7 @@ from constants import *
 
 class Animator(object):
 
-    def __init__(self, frames=[], speed=20, loop=True):
+    def __init__(self, frames=[], speed=30, loop=True):
         self.frames = frames
         self.current = 0
         self.speed = speed
