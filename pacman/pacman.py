@@ -6,6 +6,7 @@ from sprites import PacmanSprites
 from modes import PacmanModeController
 
 JOY_AXIS_TH = .7 # Threshold of joystick x/y axis (between 0 and 1)
+PRETURN_DST = 0x300 # Cornering distance
 
 class Pacman(Entity):
 
@@ -101,7 +102,7 @@ class Pacman(Entity):
         node2Self = vec2.magnitude_squared()
 
         return node2Target > node2Self \
-            and node2Target - node2Self < 640 \
+            and node2Target - node2Self < PRETURN_DST \
             and self.name in self.target.access[direction] \
             and self.target.neighbors[direction] is not None
 
