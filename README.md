@@ -23,3 +23,30 @@ Debug
 
 	make debug
 	
+Improvements
+---
+80% of the code is not mine & all credit should go to the (anonymous)
+author of [pacmancode.com](https://pacmancode.com). That being said,
+I've made the following improvements based on information I found at
+the excellent [Pac-Man Dossier](https://pacman.holenet.info) by Jamey
+Pittman (P.S. Go check out his [perfect Pac-Man game on
+YouTube](https://www.youtube.com/watch?v=AuoH0vz3Mqk))
+
+- Pac-Man gains an extra life on reaching 10,000 pts
+- Correct fruit sprites & values
+- Fruit of last 6 rounds is now displayed
+- High score is saved & restored from disk
+- Varying Pac-Man & ghost speeds by game level
+- Varying ghost fright times by game level
+- Ghosts now reverse direction when frightened
+- Pac-Man speeds up in fright mode
+- Ghosts slow down in the portal
+- Ghosts flash a few seconds before leaving fright mode
+- Pac-Man can do "pre-turns" (aka "cornering")
+- Added support for gamepads & joysticks
+- Increased game speed to match MAME as closely as possible
+- Blinky becomes faster "Elroy 1" & "Elroy 2" as pellets are depleted
+- Inky & Clyde get released from the ghost pen on a timer instead of
+  when Pac-Man has eaten 30/70 pellets
+
+Please enjoy!
