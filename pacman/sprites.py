@@ -35,36 +35,36 @@ class PacmanSprites(Spritesheet):
         self.stopImage = (8, 0)
 
     def getStartImage(self):
-        return self.getImage(8, 0)
+        return self.getImage(4, 0)
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
     def defineAnimations(self):
-        self.animations[LEFT] = Animator(((8,0), (0, 0), (0, 2), (0, 0)))
-        self.animations[RIGHT] = Animator(((10,0), (2, 0), (2, 2), (2, 0)))
-        self.animations[UP] = Animator(((10,2), (6, 0), (6, 2), (6, 0)))
-        self.animations[DOWN] = Animator(((8,2), (4, 0), (4, 2), (4, 0)))
-        self.animations[DEATH] = Animator(((0, 12), (2, 12), (4, 12),
-                                           (6, 12), (8, 12), (10, 12),
-                                           (12, 12), (14, 12), (16, 12),
-                                           (18, 12), (20, 12)),
+        self.animations[LEFT] = Animator(((4,0), (6, 0), (8, 0), (6, 0)))
+        self.animations[RIGHT] = Animator(((4,0), (2, 0), (0, 0), (2, 0)))
+        self.animations[UP] = Animator(((4,0), (10, 0), (12, 0), (10, 0)))
+        self.animations[DOWN] = Animator(((4,0), (14, 0), (16, 0), (14, 0)))
+        self.animations[DEATH] = Animator(((0, 2), (2, 2), (4, 2),
+                                           (6, 2), (8, 2), (10, 2),
+                                           (12, 2), (14, 2), (16, 2),
+                                           (18, 2), (20, 2)),
                                           speed=6, loop=False)
 
     def update(self, dt):
         if self.entity.alive:
             if self.entity.direction == LEFT:
                 self.entity.image = self.getImage(*self.animations[LEFT].update(dt))
-                self.stopimage = (8, 0)
+                self.stopimage = (6, 0)
             elif self.entity.direction == RIGHT:
                 self.entity.image = self.getImage(*self.animations[RIGHT].update(dt))
-                self.stopimage = (10, 0)
+                self.stopimage = (2, 0)
             elif self.entity.direction == DOWN:
                 self.entity.image = self.getImage(*self.animations[DOWN].update(dt))
-                self.stopimage = (8, 2)
+                self.stopimage = (14, 0)
             elif self.entity.direction == UP:
                 self.entity.image = self.getImage(*self.animations[UP].update(dt))
-                self.stopimage = (10, 2)
+                self.stopimage = (10, 0)
             elif self.entity.direction == STOP:
                 self.entity.image = self.getImage(*self.stopimage)
         else:
@@ -79,73 +79,87 @@ class GhostSprites(Spritesheet):
 
     def __init__(self, entity):
         Spritesheet.__init__(self)
-        self.x = { BLINKY:0, PINKY:2, INKY:4, CLYDE:6 }
+        self.y = { BLINKY:4, PINKY:6, INKY:8, CLYDE:10 }
         self.entity = entity
         self.entity.image = self.getStartImage()
         self.flashTime = 0.2
         self.flashTimer = 0
         self.flashed = False
+        self.animations = {}
+        self.frightAnimations = {}
+        self.flashAnimations = {}
+        self.defineAnimations()
 
     def getStartImage(self):
-        return self.getImage(self.x[self.entity.name], 4)
+        return self.getImage(4, self.y[self.entity.name])
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
+    def defineAnimations(self):
+        y = self.y[self.entity.name]
+        self.animations[LEFT] = Animator(((8, y), (10, y)))
+        self.animations[RIGHT] = Animator(((0, y), (2, y)))
+        self.animations[UP] = Animator(((0, y), (2, y)))
+        self.animations[DOWN] = Animator(((12, y), (14, y)))
+        y = 14
+        self.frightAnimations = Animator(((0, y), (2, y)))
+        self.flashAnimations = Animator(((4, y), (6, y)))
+    
     def update(self, dt):
-        x = self.x[self.entity.name]
+        y = self.y[self.entity.name]
         if self.entity.mode.current in [SCATTER, CHASE]:
             self.flashTimer = 0
             self.flashed = False
             if self.entity.direction == LEFT:
-                self.entity.image = self.getImage(x, 8)
+                self.entity.image = self.getImage(*self.animations[LEFT].update(dt))
             elif self.entity.direction == RIGHT:
-                self.entity.image = self.getImage(x, 10)
+                self.entity.image = self.getImage(*self.animations[RIGHT].update(dt))
             elif self.entity.direction == DOWN:
-                self.entity.image = self.getImage(x, 6)
+                self.entity.image = self.getImage(*self.animations[DOWN].update(dt))
             elif self.entity.direction == UP:
-                self.entity.image = self.getImage(x, 4)
+                self.entity.image = self.getImage(*self.animations[UP].update(dt))
         elif self.entity.mode.current is FRIGHT:
             if self.entity.mode.flashing:
                 self.flashTimer += dt
                 if self.flashTimer >= self.flashTime:
                     self.flashTimer = 0
                     if self.flashed:
-                        self.entity.image = self.getImage(10, 6)
+                        self.entity.image = self.getImage(*self.flashAnimations.update(dt))
                         self.flashed = False
                     else:
-                        self.entity.image = self.getImage(10, 4)
+                        self.entity.image = self.getImage(*self.frightAnimations.update(dt))
                         self.flashed = True
             else:
-                self.entity.image = self.getImage(10, 4)
+                self.entity.image = self.getImage(*self.frightAnimations.update(dt))
         elif self.entity.mode.current is SPAWN:
             self.flashTimer = 0
             self.flashed = False
             if self.entity.direction == LEFT:
-                self.entity.image = self.getImage(8, 8)
+                self.entity.image = self.getImage(8, 12)
             elif self.entity.direction == RIGHT:
-                self.entity.image = self.getImage(8, 10)
+                self.entity.image = self.getImage(0, 12)
             elif self.entity.direction == DOWN:
-                self.entity.image = self.getImage(8, 6)
+                self.entity.image = self.getImage(4, 12)
             elif self.entity.direction == UP:
-               self.entity.image = self.getImage(8, 4)
+               self.entity.image = self.getImage(12, 12)
 
 
 class FruitSprites(Spritesheet):
 
-    sprites = ( (14,8), # cherries
-                (16,8), # strawberry
-                (18,8), # orange
-                (18,8), # orange
-                (20,8), # apple
-                (20,8), # apple
-                (14,10), # pineapple
-                (14,10), # pineapple
-                (16,10), # bird
-                (16,10), # bird
-                (18,10), # bell
-                (18,10), # bell
-                (20,10) )  # key
+    sprites = ( (6,16), # cherries
+                (4,16), # strawberry
+                (2,16), # orange
+                (2,16), # orange
+                (0,16), # apple
+                (0,16), # apple
+                (8,16), # pineapple
+                (8,16), # pineapple
+                (10,16), # bird
+                (10,16), # bird
+                (12,16), # bell
+                (12,16), # bell
+                (14,16) )  # key
     
     def __init__(self, level):
         Spritesheet.__init__(self)
@@ -197,13 +211,13 @@ class MazeSprites(Spritesheet):
         for row in list(range(self.data.shape[0])):
             for col in list(range(self.data.shape[1])):
                 if self.data[row][col].isdigit():
-                    x = int(self.data[row][col]) + 12
-                    sprite = self.getImage(x, y)
+                    x = int(self.data[row][col])                    
+                    sprite = self.getImage(x, y + 20)
                     rotval = int(self.rotdata[row][col])
                     sprite = self.rotate(sprite, rotval)
                     background.blit(sprite, (col*TILEWIDTH, row*TILEHEIGHT))
                 elif self.data[row][col] == '=':
-                    sprite = self.getImage(10, 8)
+                    sprite = self.getImage(10, 20)
                     background.blit(sprite, (col*TILEWIDTH, row*TILEHEIGHT))
         return background
 

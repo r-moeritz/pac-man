@@ -73,7 +73,7 @@ class GameController(object):
         self.background_flash = pygame.surface.Surface(SCREENSIZE).convert()
         self.background_flash.fill(BLACK)
         self.background_norm = self.mazesprites.constructBackground(self.background_norm, 0)
-        self.background_flash = self.mazesprites.constructBackground(self.background_flash, 5)
+        self.background_flash = self.mazesprites.constructBackground(self.background_flash, 1)
         self.flashBG = False
         self.background = self.background_norm
 
