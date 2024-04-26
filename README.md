@@ -48,5 +48,8 @@ YouTube](https://www.youtube.com/watch?v=AuoH0vz3Mqk))
 - Blinky becomes faster "Elroy 1" & "Elroy 2" as pellets are depleted
 - Inky & Clyde get released from the ghost pen on a timer instead of
   when Pac-Man has eaten 30/70 pellets
+- The spritesheet has been replaced with one that looks better and
+  includes ghost animation frames
+- The ghosts are animated while moving
 
 Please enjoy!

@@ -15,6 +15,9 @@ class GameController(object):
     
     def __init__(self):
         pygame.init()
+        icon = pygame.image.load('icon.png')
+        pygame.display.set_icon(icon)
+        pygame.display.set_caption("Pac-Man")
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
         self.joysticks = []
         self.background = None
@@ -188,7 +191,8 @@ class GameController(object):
 
     def checkEvents(self):
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if (event.type == KEYUP and event.key == K_ESCAPE) \
+               or event.type == QUIT:
                 exit()
             elif event.type == JOYDEVICEADDED and len(self.joysticks) == 0:
                 self.joysticks.append(pygame.joystick.Joystick(event.device_index))
