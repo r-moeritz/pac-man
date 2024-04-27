@@ -2,9 +2,10 @@ Pac-Man in Python
 ===
 
 This code was initially written to follow the excellent tutorial at
-[pacmancode.com](https://pacmancode.com) on how to create your own
-Pac-Man game in Python. Since then it's been enhanced to make the game
-more faithful to the arcade original.
+[pacmancode.com](https://pacmancode.com) on how to create a Pac-Man
+game in Python. Since then it's been enhanced to make the game more
+faithful to the arcade original. See [CREDITS.md](CREDITS.md) for a
+complete list of credits.
 
 ![Recording](recording.gif)
 
@@ -25,9 +26,8 @@ Debug
 	
 Improvements
 ---
-80% of the code is not mine & all credit should go to the (anonymous)
-author of [pacmancode.com](https://pacmancode.com). That being said,
-I've made the following improvements based on information I found at
+I've made the following improvements to the code posted on
+[pacmancode.com](https://pacmancode.com), using information I found in
 the excellent [Pac-Man Dossier](https://pacman.holenet.info) by Jamey
 Pittman (P.S. Go check out his [perfect Pac-Man game on
 YouTube](https://www.youtube.com/watch?v=AuoH0vz3Mqk))
@@ -44,12 +44,13 @@ YouTube](https://www.youtube.com/watch?v=AuoH0vz3Mqk))
 - Ghosts flash a few seconds before leaving fright mode
 - Pac-Man can do "pre-turns" (aka "cornering")
 - Added support for gamepads & joysticks
-- Increased game speed to match MAME as closely as possible
+- Increased the game speed to match MAME as closely as possible
 - Blinky becomes faster "Elroy 1" & "Elroy 2" as pellets are depleted
 - Inky & Clyde get released from the ghost pen on a timer instead of
   when Pac-Man has eaten 30/70 pellets
 - The spritesheet has been replaced with one that looks better and
   includes ghost animation frames
-- The ghosts are animated while moving
+- The ghosts are animated while moving.
+- Added most sounds except for the the irritating wailing siren
 
 Please enjoy!

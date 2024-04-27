@@ -2,7 +2,7 @@ Credits
 ===
 
 * Most of the code, as well as the maze sprites, are from
-  [pacmancode.com](https://pacmancode.com], whose author appears to
+  [pacmancode.com](https://pacmancode.com), whose author appears to
   wish to remain anonymous.
 * All other sprites are from
   [here](https://labs.phaser.io/assets/games/pacman/sprites32.png). Apologies,
