@@ -2,6 +2,7 @@ import pygame
 from constants import *
 import numpy as np
 from animation import Animator
+from pathlib  import PurePath
 
 BASETILEWIDTH = 16
 BASETILEHEIGHT = 16
@@ -10,7 +11,7 @@ DEATH = 5
 class Spritesheet(object):
 
     def __init__(self):
-        self.sheet = pygame.image.load('spritesheet.png').convert()
+        self.sheet = pygame.image.load(PurePath('assets', 'spritesheet.png')).convert()
         transcolor = self.sheet.get_at((0, 0))
         self.sheet.set_colorkey(transcolor)
         width = int(self.sheet.get_width() / BASETILEWIDTH * TILEWIDTH)

@@ -10,14 +10,19 @@ from pause import Pause
 from text import TextGroup
 from sprites import LifeSprites, MazeSprites, FruitSprites
 from hiscore import HighScore
+from sounds import Sounds
+from pathlib import PurePath
 
 class GameController(object):
     
     def __init__(self):
+        pygame.mixer.pre_init(44100, -16, 2, 1024)
+        pygame.mixer.init()
         pygame.init()
-        icon = pygame.image.load('icon.png')
+        icon = pygame.image.load(PurePath('assets', 'icon.png'))
         pygame.display.set_icon(icon)
         pygame.display.set_caption("Pac-Man")
+        self.sounds = Sounds()
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
         self.joysticks = []
         self.background = None
@@ -65,9 +70,9 @@ class GameController(object):
         self.level += 1
         self.pause.paused = True
         self.fruit = None
-        self.startGame()
+        self.startGame(intro=False)
         if len(self.lastFruit) == 7:
-            self.lastFruit.pop(0)
+            self.lastFruit.pop(0) # only show last 6 fruit
         self.lastFruit.append(FruitSprites(self.level))
 
     def setBackground(self):
@@ -80,7 +85,9 @@ class GameController(object):
         self.flashBG = False
         self.background = self.background_norm
 
-    def startGame(self):
+    def startGame(self, intro=True):
+        if intro:
+            self.sounds.play(INTROSND)
         self.mazesprites = MazeSprites('maze.txt', 'mazerot.txt')
         self.setBackground()
         self.nodes = NodeGroup('maze.txt')
@@ -154,6 +161,7 @@ class GameController(object):
         if self.fruit is None:
             return
         if self.pacman.collideCheck(self.fruit):
+            self.sounds.play(EATFRUITSND)
             self.updateScore(self.fruit.points)
             self.textgroup.addText(str(self.fruit.points), WHITE,
                                    self.fruit.position.x,
@@ -167,9 +175,10 @@ class GameController(object):
         for ghost in self.ghosts:
             if not self.pacman.collideGhost(ghost):
                 continue
-            if ghost.mode.current is FRIGHT:
+            if ghost.mode.current is FRIGHT:                
                 self.pacman.visible = False
                 ghost.visible = False
+                self.sounds.play(EATGHOSTSND)
                 self.updateScore(ghost.points)
                 self.textgroup.addText(str(ghost.points), WHITE,
                                        ghost.position.x, ghost.position.y,
@@ -180,14 +189,16 @@ class GameController(object):
                 self.nodes.allowHomeAccess(ghost)
             elif ghost.mode.current is not SPAWN and self.pacman.alive:
                 self.lives -= 1
-                self.lifesprites.removeImage()
-                self.pacman.die()
+                self.lifesprites.removeImage()                
+                self.pacman.die()                
                 self.ghosts.hide()
                 if self.lives == 0:
                     self.textgroup.showText(GAMEOVERTXT)
                     self.pause.setPause(pauseTime=3, func=self.restartGame)
                 else:
                     self.pause.setPause(pauseTime=3, func=self.resetLevel)
+                pygame.time.delay(500) # short pause before death sound
+                self.sounds.play(DEATHSND)
 
     def checkEvents(self):
         for event in pygame.event.get():
@@ -236,9 +247,11 @@ class GameController(object):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if not pellet:
             return
+        self.sounds.play(CHOMPSND)
         self.pellets.numEaten += 1
         self.updateScore(pellet.points)
         if self.score >= EXTRALIFE and not self.gotExtraLife:
+            self.sounds.play(EXTRAPACSND)
             self.lives += 1
             self.lifesprites.addImage()
             self.gotExtraLife = True
