@@ -88,15 +88,15 @@ class GameController(object):
     def startGame(self, intro=True):
         if intro:
             self.sounds.play(INTROSND)
-        self.mazesprites = MazeSprites('maze.txt', 'mazerot.txt')
+        self.mazesprites = MazeSprites('data/maze', 'data/rotmaze')
         self.setBackground()
-        self.nodes = NodeGroup('maze.txt')
+        self.nodes = NodeGroup('data/maze')
         self.nodes.setPortalPair((0,17), (27,17))
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)        
         self.pacman = Pacman(self.nodes.getNodeFromTiles(15, 26), self.level, self.joysticks)
-        self.pellets = PelletGroup('maze.txt')
+        self.pellets = PelletGroup('data/maze')
         self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman, self.pellets)
         self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
         self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))

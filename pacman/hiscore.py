@@ -18,7 +18,7 @@ class HiScoreImpl(object):
     
 class HighScore(object):
 
-    HSFILE='hiscore'
+    HSFILE='data/hiscore'
 
     def __init__(self):
         if os.path.isfile(self.HSFILE):
