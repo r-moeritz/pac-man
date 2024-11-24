@@ -3,6 +3,7 @@ from entity import Entity
 from constants import *
 from sprites import FruitSprites
 
+
 # points for fruit by level
 POINTS = ( 100, # cherries
            300, # strawberry
@@ -18,6 +19,7 @@ POINTS = ( 100, # cherries
            3000, # bell
            5000 ) # key
 
+
 class Fruit(Entity):
 
     def __init__(self, node, level=0):
@@ -30,6 +32,7 @@ class Fruit(Entity):
         self.points = POINTS[level] if level < len(POINTS) else POINTS[-1]
         self.setBetweenNodes(RIGHT)
         self.image = FruitSprites(level).image
+
 
     def update(self, dt):
         self.timer += dt

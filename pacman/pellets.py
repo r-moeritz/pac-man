@@ -3,7 +3,8 @@ from vector import Vector2
 from constants import *
 import numpy as np
 
-class Pellet(object):
+
+class Pellet:
 
     def __init__(self, row, column):
         self.name = PELLET
@@ -13,6 +14,7 @@ class Pellet(object):
         self.collideRadius = int(2 * TILEWIDTH/16)
         self.points = 10
         self.visible = True
+
 
     def render(self, screen):
         if not self.visible:
@@ -32,6 +34,7 @@ class PowerPellet(Pellet):
         self.flashTime = 0.2
         self.timer = 0
 
+
     def update(self, dt):
         self.timer += dt
         if self.timer < self.flashTime:
@@ -41,7 +44,7 @@ class PowerPellet(Pellet):
         self.timer = 0
 
         
-class PelletGroup(object):
+class PelletGroup:
 
     def __init__(self, pelletfile):
         self.pelletList = []
@@ -49,9 +52,11 @@ class PelletGroup(object):
         self.createPelletList(pelletfile)
         self.numEaten = 0
 
+
     def update(self, dt):
         for powerpellet in self.powerpellets:
             powerpellet.update(dt)
+
 
     def createPelletList(self, pelletfile):
         data = self.readPelletFile(pelletfile)
@@ -64,16 +69,20 @@ class PelletGroup(object):
                     self.pelletList.append(pp)
                     self.powerpellets.append(pp)
 
+
     def readPelletFile(self, textfile):
         return np.loadtxt(textfile, dtype='<U1')
+
 
     @property
     def isEmpty(self):
         return True if len(self.pelletList) == 0 else False
 
+
     @property
     def remaining(self):
         return len(self.pelletList)
+
 
     def render(self, screen):
         for pellet in self.pelletList:

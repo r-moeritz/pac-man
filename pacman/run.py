@@ -13,7 +13,8 @@ from hiscore import HighScore
 from sounds import Sounds
 from pathlib import PurePath
 
-class GameController(object):
+
+class GameController:
     
     def __init__(self):
         pygame.mixer.pre_init(frequency=48000,
@@ -47,6 +48,7 @@ class GameController(object):
         self.gotExtraLife = False
         self.textgroup.updateScores(self.score, self.hiscore)
 
+
     def restartGame(self):
         self.lives = NUMLIVES
         self.lifesprites.resetLives(self.lives)
@@ -59,12 +61,14 @@ class GameController(object):
         self.pause.setPause() # resume
         self.startGame()
 
+
     def resetLevel(self):
         self.pacman.reset()
         self.ghosts.reset()
         self.fruit = None
         self.textgroup.showText(READYTXT)
         self.pause.setPause(pauseTime=1, func=lambda: self.textgroup.hideText() or self.showEntities())
+
 
     def nextLevel(self):
         self.level += 1
@@ -73,6 +77,7 @@ class GameController(object):
             self.lastFruit.pop(0) # only show last 6 fruit
         self.lastFruit.append(FruitSprites(self.level))
         self.pause.setPause(pauseTime=1, func=lambda: self.startGame(intro=False))
+
 
     def setBackground(self):
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
@@ -83,6 +88,7 @@ class GameController(object):
         self.background_flash = self.mazesprites.constructBackground(self.background_flash, 1)
         self.flashBG = False
         self.background = self.background_norm
+
 
     def startGame(self, intro=True):
         self.mazesprites = MazeSprites('data/maze', 'data/rotmaze')
@@ -121,6 +127,7 @@ class GameController(object):
                                 func=lambda: self.textgroup.hideText() \
                                     or self.showEntities())
 
+
     def update(self):
         dt = self.clock.tick(60) / 1000.0
         self.textgroup.update(dt)
@@ -155,10 +162,12 @@ class GameController(object):
         self.checkEvents()
         self.render()
 
+
     def updateScore(self, points):
         self.score += points
         self.hiscore.set(self.score)
         self.textgroup.updateScores(self.score, self.hiscore)
+
 
     def checkFruitEvents(self):
         if (self.pellets.numEaten == 70 or self.pellets.numEaten == 170) \
@@ -177,6 +186,7 @@ class GameController(object):
             self.fruit = None
         elif self.fruit.destroy:
             self.fruit = None
+
 
     def checkGhostEvents(self):
         for ghost in self.ghosts:
@@ -207,6 +217,7 @@ class GameController(object):
                     self.pause.setPause(pauseTime=4, func=self.resetLevel)
                 self.sounds.play(DYINGSND)
 
+
     def checkEvents(self):
         for event in pygame.event.get():
             if (event.type == KEYUP and event.key == K_ESCAPE) \
@@ -222,6 +233,7 @@ class GameController(object):
                   or event.type == JOYBUTTONDOWN) and not self.flashBG \
                   and not self.pacman.alive and self.lives == 0:
                     self.restartGame()
+
 
     def render(self):
         self.screen.blit(self.background, (0,0))
@@ -240,6 +252,7 @@ class GameController(object):
             y = SCREENHEIGHT - self.lastFruit[i].image.get_height()
             self.screen.blit(self.lastFruit[i].image, (x, y))
         pygame.display.update()
+
 
     def checkPelletEvents(self):
         if self.pacman.mode.fright:
@@ -267,9 +280,11 @@ class GameController(object):
         elif self.ghosts.blinky.isElroy:
             self.ghosts.blinky.setElroySpeed()
 
+
     def showEntities(self):
         self.pacman.visible = True
         self.ghosts.show()
+
 
     def hideEntities(self):
         self.pacman.visible = False

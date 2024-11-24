@@ -3,6 +3,7 @@ from pygame.mixer import Sound, Channel
 from constants import *
 from pathlib import PurePath
 
+
 class SoundInfo:
 
     def __init__(self,
@@ -17,32 +18,38 @@ class SoundInfo:
         self._priority = priority
         self._next = next
 
+
     @property
     def sound(self) -> Sound:
         return self._sound
+
 
     @property
     def foreground(self) -> bool:
         return self._foreground
 
+
     @property
     def maxtime(self) -> int:
         return self._maxtime
+
 
     @property
     def priority(self) -> bool:
         return self._priority
 
+
     @property
     def next(self) -> 'SoundInfo':
         return self._next
+
 
     @staticmethod
     def filepath(name: str) -> str:
         return PurePath('assets', name + '.mp3')
 
 
-class Sounds(object):
+class Sounds:
     
     def __init__(self):
         pygame.mixer.set_num_channels(2)
@@ -65,10 +72,12 @@ class Sounds(object):
             FRIGHTSND: SoundInfo('fright'),
         }
        
+
     def __del__(self):
         if pygame.mixer.get_init():
             pygame.mixer.stop()
-        
+
+
     def play(self, soundid):
         if self.cur_sinf and self.cur_sinf.priority \
             and self.cur_sinf.foreground and self.fg_channel.get_busy():

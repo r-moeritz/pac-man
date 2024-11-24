@@ -6,6 +6,7 @@ from entity import Entity
 from modes import GhostModeController
 from sprites import GhostSprites
 
+
 class Ghost(Entity):
 
     # normal, fright, and portal speeds by level
@@ -14,7 +15,8 @@ class Ghost(Entity):
                (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
                (int(SPEED*.85), int(SPEED*.55), int(SPEED*.45)),
                (int(SPEED*.95), int(SPEED*.6), int(SPEED*.5)) )
-    
+
+
     def __init__(self, node, pacman, blinky=None):
         Entity.__init__(self, node)
         self.name = GHOST
@@ -27,6 +29,7 @@ class Ghost(Entity):
         self.blinky = blinky
         self.homeNode = node
         self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])
+
 
     def update(self, dt):
         self.sprites.update(dt)
@@ -41,11 +44,14 @@ class Ghost(Entity):
             self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][i])
         Entity.update(self, dt)
 
+
     def scatter(self):
         self.goal = Vector2()
 
+
     def chase(self):
         self.goal = self.pacman.position
+
 
     def startFright(self):
         self.mode.setFrightMode()
@@ -54,16 +60,20 @@ class Ghost(Entity):
             self.reverseDirection()
             self.directionMethod = self.randomDirection
 
+
     def normalMode(self):
         self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])
         self.directionMethod = self.goalDirection
         self.homeNode.denyAccess(DOWN, self)
 
+
     def spawn(self):
         self.goal = self.spawnNode.position
 
+
     def setSpawnNode(self, node):
         self.spawnNode = node
+
 
     def startSpawn(self):
         self.mode.setSpawnMode()
@@ -71,6 +81,7 @@ class Ghost(Entity):
             self.setSpeed(2 * self.speeds[self.level if self.level < len(self.speeds) else -1][0])
             self.directionMethod = self.goalDirection
             self.spawn()
+
 
     def reset(self):
         Entity.reset(self)
@@ -101,6 +112,8 @@ class Blinky(Ghost):
                (100, SPEED),
                (100, SPEED),
                (120, SPEED) )
+
+
     elroy2 = ( (10, int(SPEED*.85)),
                (15, int(SPEED*.95)),
                (20, int(SPEED*.95)),
@@ -121,6 +134,7 @@ class Blinky(Ghost):
                (50, int(SPEED*1.05)),
                (60, int(SPEED*1.05)) )
 
+
     def __init__(self, node, pacman, pellets, blinky=None):
         self.pellets = pellets
         Ghost.__init__(self, node, pacman, blinky)
@@ -129,11 +143,14 @@ class Blinky(Ghost):
         self.sprites = GhostSprites(self)
         self.level = pacman.level
 
+
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, 0)
 
+
     def setSpeed(self, speed):
         self.setElroySpeed() if self.isElroy else Entity.setSpeed(self, speed)
+
 
     def setElroySpeed(self):
         Entity.setSpeed(self, self.elroySpeed)

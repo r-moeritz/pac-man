@@ -4,7 +4,8 @@ from vector import Vector2
 from constants import *
 from random import randint
 
-class Entity(object):
+
+class Entity:
 
     def __init__(self, node):
         self.name = None
@@ -24,24 +25,29 @@ class Entity(object):
         self.speed = 0
         self.image = None
 
+
     def setStartNode(self, node):
         self.node = node
         self.startNode = node
         self.target = node
         self.setPosition()
 
+
     def setPosition(self):
         self.position = self.node.position.copy()
+
 
     def validDirection(self, direction):
         return direction is not STOP \
             and self.name in self.node.access[direction] \
             and self.node.neighbors[direction] is not None
 
+
     def getNewTarget(self, direction):
         return self.node.neighbors[direction] \
             if self.validDirection(direction) \
             else self.node
+
 
     def overshotTarget(self):
         if self.target is None:
@@ -53,16 +59,20 @@ class Entity(object):
         node2Self = vec2.magnitude_squared()
         return node2Self >= node2Target
 
+
     def reverseDirection(self):
         self.direction *= -1
         self.node,self.target = self.target,self.node
 
+
     def oppositeDirection(self, direction):
         return direction is not STOP \
             and direction == self.direction * - 1
-    
+
+
     def setSpeed(self, speed):
         self.speed = speed * TILEWIDTH / 16
+
 
     def render(self, screen):
         if not self.visible:
@@ -74,6 +84,7 @@ class Entity(object):
             adjust = Vector2(TILEWIDTH, TILEHEIGHT) / 2
             p = self.position - adjust
             screen.blit(self.image, p.asTuple())
+
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
@@ -92,6 +103,7 @@ class Entity(object):
 
             self.setPosition()
 
+
     def validDirections(self):
         directions = []
         for key in [UP, DOWN, LEFT, RIGHT]:
@@ -101,8 +113,10 @@ class Entity(object):
             directions.append(self.direction * -1)
         return directions
 
+
     def randomDirection(self, directions):
         return directions[randint(0, len(directions) - 1)]
+
 
     def goalDirection(self, directions):
         distances = []
@@ -112,12 +126,14 @@ class Entity(object):
         index = distances.index(min(distances))
         return directions[index]
 
+
     def setBetweenNodes(self, direction):
         if self.node.neighbors[direction] is None:
             return
         self.target = self.node.neighbors[direction]
         self.position = (self.node.position + self.target.position) / 2.0
-        
+
+
     def reset(self):
         self.setStartNode(self.startNode)
         self.direction = STOP

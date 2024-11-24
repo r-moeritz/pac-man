@@ -4,11 +4,13 @@ import numpy as np
 from animation import Animator
 from pathlib  import PurePath
 
+
 BASETILEWIDTH = 16
 BASETILEHEIGHT = 16
 DEATH = 5
 
-class Spritesheet(object):
+
+class Spritesheet:
 
     def __init__(self):
         self.sheet = pygame.image.load(PurePath('assets', 'spritesheet.png')).convert()
@@ -17,6 +19,7 @@ class Spritesheet(object):
         width = int(self.sheet.get_width() / BASETILEWIDTH * TILEWIDTH)
         height = int(self.sheet.get_height() / BASETILEHEIGHT * TILEHEIGHT)
         self.sheet = pygame.transform.scale(self.sheet, (width, height))
+
 
     def getImage(self, x, y, width, height):
         x *= TILEWIDTH
@@ -35,11 +38,14 @@ class PacmanSprites(Spritesheet):
         self.defineAnimations()
         self.stopImage = (8, 0)
 
+
     def getStartImage(self):
         return self.getImage(4, 0)
 
+
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
+
 
     def defineAnimations(self):
         self.animations[LEFT] = Animator(((4,0), (6, 0), (8, 0), (6, 0)))
@@ -51,6 +57,7 @@ class PacmanSprites(Spritesheet):
                                            (12, 2), (14, 2), (16, 2),
                                            (18, 2), (20, 2)),
                                           speed=6.5, loop=False)
+
 
     def update(self, dt):
         if self.entity.alive:
@@ -70,6 +77,7 @@ class PacmanSprites(Spritesheet):
                 self.entity.image = self.getImage(*self.stopimage)
         else:
             self.entity.image = self.getImage(*self.animations[DEATH].update(dt))
+
 
     def reset(self):
         for key in list(self.animations.keys()):
@@ -91,11 +99,14 @@ class GhostSprites(Spritesheet):
         self.flashAnimations = {}
         self.defineAnimations()
 
+
     def getStartImage(self):
         return self.getImage(4, self.y[self.entity.name])
 
+
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
+
 
     def defineAnimations(self):
         y = self.y[self.entity.name]
@@ -106,6 +117,7 @@ class GhostSprites(Spritesheet):
         y = 14
         self.frightAnimations = Animator(((0, y), (2, y)))
         self.flashAnimations = Animator(((4, y), (6, y)))
+
     
     def update(self, dt):
         y = self.y[self.entity.name]
@@ -161,13 +173,16 @@ class FruitSprites(Spritesheet):
                 (12,16), # bell
                 (12,16), # bell
                 (14,16) )  # key
+
     
     def __init__(self, level):
         Spritesheet.__init__(self)
         self.image = self.getStartImage(level if level < len(self.sprites) else -1)
 
+
     def getStartImage(self, key):
         return self.getImage(*self.sprites[key])
+
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
@@ -179,17 +194,21 @@ class LifeSprites(Spritesheet):
         Spritesheet.__init__(self)
         self.resetLives(numlives)
 
+
     def removeImage(self):
         if len(self.images) != 0:
             self.images.pop(0)
 
+
     def addImage(self):
         self.images.append(self.getImage(6, 0))
+
 
     def resetLives(self, numlives):
         self.images = []
         for i in range(numlives):
             self.images.append(self.getImage(6, 0))
+
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
@@ -202,11 +221,14 @@ class MazeSprites(Spritesheet):
         self.data = self.readMazeFile(mazefile)
         self.rotdata = self.readMazeFile(rotfile)
 
+
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, TILEWIDTH, TILEHEIGHT)
 
+
     def readMazeFile(self, mazefile):
         return np.loadtxt(mazefile, dtype='<U1')
+
 
     def constructBackground(self, background, y):
         for row in list(range(self.data.shape[0])):
@@ -221,6 +243,7 @@ class MazeSprites(Spritesheet):
                     sprite = self.getImage(10, 20)
                     background.blit(sprite, (col*TILEWIDTH, row*TILEHEIGHT))
         return background
+
 
     def rotate(self, sprite, value):
         return pygame.transform.rotate(sprite, value*90)

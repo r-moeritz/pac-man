@@ -1,6 +1,7 @@
 from constants import *
 
-class GhostMainMode(object):
+
+class GhostMainMode:
 
     # times for scatter/chase mode cycles by level
     cycles = ( ((7, 20), (7, 20), (5, 20), (5, float('inf'))),
@@ -9,11 +10,13 @@ class GhostMainMode(object):
                ((7, 20), (7, 20), (5, 1033), (.017, float('inf'))),
                ((5, 20), (5, 20), (5, 1037), (.017, float('inf'))) )
 
+
     def __init__(self, level):
         self.timer = 0
         self.cycle = 0
         self.level = level
         self.scatter()
+
 
     def update(self, dt):
         self.timer += dt
@@ -24,10 +27,12 @@ class GhostMainMode(object):
         elif self.mode is CHASE:
             self.scatter()
 
+
     def scatter(self):
         self.mode = SCATTER
         self.time = self.cycles[self.level if self.level < len(self.cycles) else -1][self.cycle][0]
         self.timer = 0
+
 
     def chase(self):
         self.mode = CHASE
@@ -40,8 +45,9 @@ class GhostMainMode(object):
 # fright times by level
 FRIGHT_TIMES = ( 6, 5, 4, 3, 2, 5, 2, 2,
                  1, 5, 2, 1, 1, 3, 1 )
-        
-class GhostModeController(object):
+
+
+class GhostModeController:
 
     def __init__(self, entity, level):
         self.timer = 0
@@ -51,6 +57,7 @@ class GhostModeController(object):
         self.current = self.mainmode.mode
         self.entity = entity
         self.flashing = False
+
 
     def update(self, dt):
         self.mainmode.update(dt)
@@ -75,9 +82,11 @@ class GhostModeController(object):
                 self.entity.normalMode()
                 self.current = self.mainmode.mode
 
+
     def setSpawnMode(self):
         if self.current is FRIGHT:
             self.current = SPAWN
+
 
     def setFrightMode(self):
         if self.current in (SCATTER, CHASE):
@@ -88,7 +97,7 @@ class GhostModeController(object):
             self.timer = 0
 
 
-class PacmanModeController(object):
+class PacmanModeController:
 
     def __init__(self, entity, level):
         self.timer = 0
@@ -96,6 +105,7 @@ class PacmanModeController(object):
         self.fright = False
         self.entity = entity
         self.level = level
+
 
     def update(self, dt):
         if not self.fright:
@@ -105,6 +115,7 @@ class PacmanModeController(object):
             return
         self.fright = False
         self.entity.normalMode()
+
 
     def setFrightMode(self):
         self.timer = 0

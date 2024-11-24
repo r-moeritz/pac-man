@@ -5,8 +5,10 @@ from entity import Entity
 from sprites import PacmanSprites
 from modes import PacmanModeController
 
+
 JOY_AXIS_TH = .7 # Threshold of joystick x/y axis (between 0 and 1)
 PRETURN_DST = 0x300 # Cornering distance
+
 
 class Pacman(Entity):
 
@@ -32,7 +34,8 @@ class Pacman(Entity):
                (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
                (SPEED, int(SPEED*.87), SPEED, int(SPEED*.87)),
                (int(SPEED*.9), int(SPEED*.79), int(SPEED*.95), int(SPEED*.83)) )
-    
+
+
     def __init__(self, node, level, joysticks):
         Entity.__init__(self, node)
         self.name = PACMAN
@@ -45,6 +48,7 @@ class Pacman(Entity):
         self.setSpeed(self.speeds[level if level < len(self.speeds) else -1][0])
         self.mode = PacmanModeController(self, self.level)
 
+
     def reset(self):
         Entity.reset(self)
         self.direction = LEFT
@@ -54,10 +58,12 @@ class Pacman(Entity):
         self.sprites.reset()
         self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])
 
+
     def die(self):
         self.alive = False
         self.direction = STOP
         self.normalMode()
+
 
     def update(self, dt):
         self.sprites.update(dt)
@@ -87,11 +93,13 @@ class Pacman(Entity):
         elif self.oppositeDirection(dir):
             self.reverseDirection()
 
+
     def perpendicularDirection(self, direction):
         return direction is not STOP \
             and self.direction is not STOP \
             and abs(abs(direction) - abs(self.direction)) == 1
-            
+
+
     def isPreTurn(self, direction):
         if self.target is None or not self.perpendicularDirection(direction):
             return False
@@ -105,6 +113,7 @@ class Pacman(Entity):
             and node2Target - node2Self < PRETURN_DST \
             and self.name in self.target.access[direction] \
             and self.target.neighbors[direction] is not None
+
 
     def getValidKey(self):
         if not self.visible or not self.alive:
@@ -137,6 +146,7 @@ class Pacman(Entity):
             
         return STOP
 
+
     def eatPellets(self, pelletList):
         eat = None
         for pellet in pelletList:
@@ -149,8 +159,10 @@ class Pacman(Entity):
             self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][1 if eat else 0])
         return eat
 
+
     def collideGhost(self, ghost):
         return self.collideCheck(ghost)
+
 
     def collideCheck(self, other):
         d = self.position - other.position
@@ -158,9 +170,11 @@ class Pacman(Entity):
         rSquared = (other.radius + self.collideRadius)**2
         return dSquared <= rSquared
 
+
     def startFright(self):
         self.mode.setFrightMode()
         self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][2])
+
 
     def normalMode(self):
         self.setSpeed(self.speeds[self.level if self.level < len(self.speeds) else -1][0])

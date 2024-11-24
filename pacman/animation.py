@@ -1,6 +1,7 @@
 from constants import *
 
-class Animator(object):
+
+class Animator:
 
     def __init__(self, frames=[], speed=30, loop=True):
         self.frames = frames
@@ -10,9 +11,11 @@ class Animator(object):
         self.dt = 0
         self.finished = False
 
+
     def reset(self):
         self.current = 0
         self.finished = False
+
 
     def update(self, dt):
         if not self.finished:
@@ -24,6 +27,7 @@ class Animator(object):
                 self.finished = True
                 self.current -= 1
         return self.frames[self.current]
+
 
     def nextFrame(self, dt):
         self.dt += dt
