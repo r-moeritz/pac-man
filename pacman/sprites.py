@@ -50,7 +50,7 @@ class PacmanSprites(Spritesheet):
                                            (6, 2), (8, 2), (10, 2),
                                            (12, 2), (14, 2), (16, 2),
                                            (18, 2), (20, 2)),
-                                          speed=6, loop=False)
+                                          speed=3.5, loop=False)
 
     def update(self, dt):
         if self.entity.alive:

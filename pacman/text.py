@@ -66,7 +66,6 @@ class TextGroup(object):
         self.allText[SCORETXT] = Text('0'.zfill(2), WHITE, 2*TILEWIDTH, TILEHEIGHT, size)
         self.allText[HISCORETXT] = Text('', WHITE, 14*TILEWIDTH, TILEHEIGHT, size)
         self.allText[READYTXT] = Text('READY!', YELLOW, 11.25*TILEWIDTH, 20*TILEHEIGHT, size, visible=False)
-        self.allText[PAUSETXT] = Text('PAUSED!', YELLOW, 10.625*TILEWIDTH, 20*TILEHEIGHT, size, visible=False)
         self.allText[GAMEOVERTXT] = Text('GAME  OVER', RED, 9*TILEWIDTH, 20*TILEHEIGHT, size, visible=False)
         self.addText('1UP', WHITE, 2*TILEWIDTH, 0, size)
         self.addText('HIGH SCORE', WHITE, 14*TILEWIDTH, 0, size)
@@ -83,7 +82,6 @@ class TextGroup(object):
 
     def hideText(self):
         self.allText[READYTXT].visible = False
-        self.allText[PAUSETXT].visible = False
         self.allText[GAMEOVERTXT].visible = False
 
     def updateScores(self, score, hiscore):

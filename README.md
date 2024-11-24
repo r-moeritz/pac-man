@@ -51,6 +51,6 @@ YouTube](https://www.youtube.com/watch?v=AuoH0vz3Mqk))
 - The spritesheet has been replaced with one that looks better and
   includes ghost animation frames
 - The ghosts are animated while moving.
-- Added most sounds except for the the irritating wailing siren
+- Added most sounds
 
 Please enjoy!

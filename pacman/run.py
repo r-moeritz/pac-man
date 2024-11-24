@@ -30,7 +30,7 @@ class GameController(object):
         self.background_flash = None
         self.clock = pygame.time.Clock()
         self.fruit = None
-        self.pause = Pause(True)
+        self.pause = Pause(False)
         self.level = 0
         self.lives = NUMLIVES
         self.score = 0
@@ -41,7 +41,6 @@ class GameController(object):
         self.flashTime = 0.2
         self.flashTimer = 0
         self.lastFruit = [FruitSprites(self.level)]
-        self.begun = True
         self.gotExtraLife = False
         self.textgroup.updateScores(self.score, self.hiscore)
 
@@ -49,31 +48,28 @@ class GameController(object):
         self.lives = NUMLIVES
         self.lifesprites.resetLives(self.lives)
         self.level = 0
-        self.pause.paused = True
         self.fruit = None
         self.score = 0
-        self.startGame()
         self.textgroup.updateScores(self.score, self.hiscore)
         self.textgroup.showText(READYTXT)
         self.lastFruit = [FruitSprites(self.level)]
-        self.begun = True
+        self.pause.setPause() # resume
+        self.startGame()
 
     def resetLevel(self):
-        self.pause.paused = True
         self.pacman.reset()
         self.ghosts.reset()
         self.fruit = None
         self.textgroup.showText(READYTXT)
+        self.pause.setPause(pauseTime=1, func=lambda: self.textgroup.hideText() or self.showEntities())
 
     def nextLevel(self):
-        self.showEntities()
         self.level += 1
-        self.pause.paused = True
         self.fruit = None
-        self.startGame(intro=False)
         if len(self.lastFruit) == 7:
             self.lastFruit.pop(0) # only show last 6 fruit
         self.lastFruit.append(FruitSprites(self.level))
+        self.pause.setPause(pauseTime=1, func=lambda: self.startGame(intro=False))
 
     def setBackground(self):
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
@@ -86,8 +82,6 @@ class GameController(object):
         self.background = self.background_norm
 
     def startGame(self, intro=True):
-        if intro:
-            self.sounds.play(INTROSND)
         self.mazesprites = MazeSprites('data/maze', 'data/rotmaze')
         self.setBackground()
         self.nodes = NodeGroup('data/maze')
@@ -113,6 +107,16 @@ class GameController(object):
         self.nodes.denyAccessList(15, 14, UP, self.ghosts)
         self.nodes.denyAccessList(12, 26, UP, self.ghosts)
         self.nodes.denyAccessList(15, 26, UP, self.ghosts)
+
+        if intro:
+            self.sounds.play(INTROSND)
+            self.pause.setPause(pauseTime=4.5,
+                                func=lambda: self.textgroup.hideText() \
+                                    or self.showEntities())
+        else:
+            self.pause.setPause(pauseTime=1,
+                                func=lambda: self.textgroup.hideText() \
+                                    or self.showEntities())
 
     def update(self):
         dt = self.clock.tick(60) / 1000.0
@@ -193,12 +197,12 @@ class GameController(object):
                 self.pacman.die()                
                 self.ghosts.hide()
                 if self.lives == 0:
+                    self.fruit = None
                     self.textgroup.showText(GAMEOVERTXT)
-                    self.pause.setPause(pauseTime=3, func=self.restartGame)
+                    self.pause.setPause()
                 else:
-                    self.pause.setPause(pauseTime=3, func=self.resetLevel)
-                pygame.time.delay(500) # short pause before death sound
-                self.sounds.play(DEATHSND)
+                    self.pause.setPause(pauseTime=4, func=self.resetLevel)
+                self.sounds.play(DYINGSND)
 
     def checkEvents(self):
         for event in pygame.event.get():
@@ -213,17 +217,8 @@ class GameController(object):
                     self.joysticks.pop()
             elif ((event.type == KEYDOWN and event.key == K_SPACE) \
                   or event.type == JOYBUTTONDOWN) and not self.flashBG \
-                  and self.pacman.alive:
-                self.pause.setPause(playerPaused=True)
-                if not self.pause.paused:
-                    if self.begun:
-                        self.lifesprites.removeImage()
-                        self.begun = False
-                    self.textgroup.hideText()
-                    self.showEntities()
-                else:
-                    self.textgroup.showText(PAUSETXT)
-                    self.hideEntities()
+                  and not self.pacman.alive and self.lives == 0:
+                    self.restartGame()
 
     def render(self):
         self.screen.blit(self.background, (0,0))
@@ -244,6 +239,10 @@ class GameController(object):
         pygame.display.update()
 
     def checkPelletEvents(self):
+        if self.pacman.mode.fright:
+            self.sounds.play(FRIGHTSND)
+        else:
+            self.sounds.play(SIRENSND)
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if not pellet:
             return
