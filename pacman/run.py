@@ -27,7 +27,8 @@ class GameController:
         pygame.display.set_icon(icon)
         pygame.display.set_caption("Pac-Man")
         self.sounds = Sounds()
-        self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
+        self.screen = pygame.display.set_mode(size=SCREENSIZE,
+                                              flags=pygame.SCALED | pygame.RESIZABLE)
         self.joysticks = []
         self.background = None
         self.background_norm = None
