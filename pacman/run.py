@@ -16,7 +16,10 @@ from pathlib import PurePath
 class GameController(object):
     
     def __init__(self):
-        pygame.mixer.pre_init(44100, -16, 2, 1024)
+        pygame.mixer.pre_init(frequency=48000,
+                              size=-16,
+                              channels=2,
+                              buffer=1024)
         pygame.mixer.init()
         pygame.init()
         icon = pygame.image.load(PurePath('assets', 'icon.png'))
