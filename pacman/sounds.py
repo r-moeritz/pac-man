@@ -86,7 +86,7 @@ class Sounds:
         new_sinf = self.soundinfos.get(soundid)
 
         if new_sinf.priority and self.cur_sinf:
-            # New sound has priority, mute current sounds
+            # New sound has priority, mute current sound
             self.cur_sinf.sound.set_volume(0)
 
         if new_sinf.foreground:
@@ -95,7 +95,7 @@ class Sounds:
             if new_sinf.next:
                 self.fg_channel.queue(new_sinf.next.sound)
         else:
-            new_sinf.sound.play()
+            new_sinf.sound.play(maxtime=new_sinf.maxtime)
             new_sinf.sound.set_volume(.75)
 
         self.cur_sinf = new_sinf
