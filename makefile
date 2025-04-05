@@ -1,4 +1,4 @@
-.PHONY: install run
+.PHONY: install run clean distclean
 
 ACTIVATE :=
 ifeq ($(OS), Windows_NT)
@@ -16,3 +16,9 @@ run:
 
 debug:
 	. $(ACTIVATE) && python -m pdb pacman/run.py && deactivate
+
+clean:
+	rm -rf pacman/__pycache__
+
+distclean: $(clean)
+	rm -rf .venv

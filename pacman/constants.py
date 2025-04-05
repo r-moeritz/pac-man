@@ -9,13 +9,14 @@ SCREENSIZE = (SCREENWIDTH, SCREENHEIGHT)
 
 # Colours (R, G, B)
 BLACK = (0, 0, 0)
-YELLOW = (255, 255, 0)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-PINK = (255, 100, 150)
-TEAL = (100, 255, 255)
-ORANGE = (230, 190, 40)
-GREEN = (0, 255, 0)
+YELLOW = (0xFF, 0xFF, 0)
+WHITE = (0xFF, 0xFF, 0xFF)
+RED = (0xFF, 0, 0)
+LTPINK = (0xFF, 0xB6, 0xC1)
+PINK = (0xFF, 0x64, 0x96)
+TEAL = (0x64, 0xFF, 0xFF)
+ORANGE = (0xE6, 0xBE, 0x28)
+GREEN = (0, 0xFF, 0)
 
 # Directions
 STOP = 0 # None
@@ -59,6 +60,6 @@ SIRENSND = 7
 FRIGHTSND = 8
 
 # Misc
-SPEED = 140
+SPEED = 120
 EXTRALIFE = 10000
 NUMLIVES = 3
